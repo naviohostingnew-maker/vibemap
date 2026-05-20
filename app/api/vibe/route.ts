@@ -9,8 +9,9 @@ export async function POST(req: NextRequest) {
     }
     const response = await vibeRespond(message);
     return NextResponse.json({ response });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error('[vibe/route] error:', e);
-    return NextResponse.json({ error: e.message ?? 'unknown' }, { status: 500 });
+    const message = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

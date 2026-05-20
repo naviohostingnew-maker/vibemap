@@ -1,4 +1,4 @@
-import type { Tool } from '@anthropic-ai/sdk/resources/messages';
+import type { Tool, ToolUnion } from '@anthropic-ai/sdk/resources/messages';
 
 export const vibeCustomTools: Tool[] = [
   {
@@ -59,8 +59,8 @@ export const vibeCustomTools: Tool[] = [
 
 export const webSearchTool = {
   type: 'web_search_20250305' as const,
-  name: 'web_search',
+  name: 'web_search' as const,
   max_uses: 3,
 };
 
-export const vibeTools = [...vibeCustomTools, webSearchTool] as any;
+export const vibeTools: ToolUnion[] = [...vibeCustomTools, webSearchTool];
