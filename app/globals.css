@@ -3,21 +3,26 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Aurora — base */
+  --bg-cream: #fef5ee;
+  /* Aurora — ink scale */
+  --ink: #2a1832;
+  --ink-70: #2a183299;
+  --ink-50: #2a183280;
+  --ink-30: #2a183240;
+  --rose-deep: #6b2e4d;
+  /* Aurora — accent gradient stops */
+  --accent-magenta: #d4537e;
+  --accent-orange: #ef9f27;
+  /* legacy aliases (CNA boilerplate references bg-background / text-foreground) */
+  --background: var(--bg-cream);
+  --foreground: var(--ink);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  background-color: var(--bg-cream);
+  font-family: var(--font-body), Manrope, ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer utilities {
