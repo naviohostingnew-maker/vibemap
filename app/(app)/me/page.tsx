@@ -1,13 +1,18 @@
 import { redirect } from 'next/navigation'
 import { createServerClient } from '@/lib/supabase/server'
+import { ensureUserProvisioned } from '@/lib/supabase/provisioning'
 import { SignOutButton } from '@/components/auth/SignOutButton'
 
 export default async function MePage() {
+  const supabase = createServerClient()
   const {
     data: { user },
-  } = await createServerClient().auth.getUser()
+  } = await supabase.auth.getUser()
 
   if (!user) redirect('/login')
+
+  // Safety net: ensure the vibemap.users row exists even if callback provisioning was skipped.
+  await ensureUserProvisioned(supabase, user)
 
   return (
     <div className="mx-auto mt-24 max-w-md">
