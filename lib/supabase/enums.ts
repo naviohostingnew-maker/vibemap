@@ -19,3 +19,10 @@ export type RecommendationOutcome = 'ignored' | 'viewed' | 'booked' | 'rejected'
 export type ReflectionFeeling = 'fire' | 'neutral' | 'not_clicked'
 
 export type VibeMemoryType = 'episodic' | 'semantic' | 'procedural' | 'social'
+
+// Onboarding layer (migration 015). CHECK-backed, same convention as above.
+export type QuestionCategory = 'evenings' | 'people' | 'places' | 'tastes' | 'pace'
+
+export type AnswerKey = 'a' | 'b' | 'c' | 'd'
+
+export type VibeProfileStatus = 'pending' | 'generating' | 'ready' | 'failed'

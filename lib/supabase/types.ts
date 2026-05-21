@@ -340,6 +340,36 @@ export type Database = {
           },
         ]
       }
+      questions: {
+        Row: {
+          accent_word: string
+          category: string
+          created_at: string
+          id: string
+          options: Json
+          order_num: number
+          text: string
+        }
+        Insert: {
+          accent_word: string
+          category: string
+          created_at?: string
+          id?: string
+          options: Json
+          order_num: number
+          text: string
+        }
+        Update: {
+          accent_word?: string
+          category?: string
+          created_at?: string
+          id?: string
+          options?: Json
+          order_num?: number
+          text?: string
+        }
+        Relationships: []
+      }
       recommendations: {
         Row: {
           external_id: string | null
@@ -437,6 +467,80 @@ export type Database = {
             foreignKeyName: "reflections_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_answers: {
+        Row: {
+          answer_key: string
+          answered_at: string
+          id: string
+          question_id: string
+          user_id: string
+        }
+        Insert: {
+          answer_key: string
+          answered_at?: string
+          id?: string
+          question_id: string
+          user_id: string
+        }
+        Update: {
+          answer_key?: string
+          answered_at?: string
+          id?: string
+          question_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_answers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_vibe_profile: {
+        Row: {
+          created_at: string
+          portrait_url: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          vibe_summary: string | null
+        }
+        Insert: {
+          created_at?: string
+          portrait_url?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          vibe_summary?: string | null
+        }
+        Update: {
+          created_at?: string
+          portrait_url?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          vibe_summary?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_vibe_profile_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
