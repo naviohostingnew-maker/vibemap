@@ -20,9 +20,13 @@ export type ReflectionFeeling = 'fire' | 'neutral' | 'not_clicked'
 
 export type VibeMemoryType = 'episodic' | 'semantic' | 'procedural' | 'social'
 
-// Onboarding layer (migration 015). CHECK-backed, same convention as above.
-export type QuestionCategory = 'evenings' | 'people' | 'places' | 'tastes' | 'pace'
+// Onboarding layer (migration 015). CHECK-backed; runtime const arrays so server
+// actions can validate (Zod) against the same source the types derive from.
+export const QUESTION_CATEGORIES = ['evenings', 'people', 'places', 'tastes', 'pace'] as const
+export type QuestionCategory = (typeof QUESTION_CATEGORIES)[number]
 
-export type AnswerKey = 'a' | 'b' | 'c' | 'd'
+export const ANSWER_KEYS = ['a', 'b', 'c', 'd'] as const
+export type AnswerKey = (typeof ANSWER_KEYS)[number]
 
-export type VibeProfileStatus = 'pending' | 'generating' | 'ready' | 'failed'
+export const VIBE_PROFILE_STATUSES = ['pending', 'generating', 'ready', 'failed'] as const
+export type VibeProfileStatus = (typeof VIBE_PROFILE_STATUSES)[number]
