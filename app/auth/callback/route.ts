@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server'
 import { createRouteClient } from '@/lib/supabase/server'
 import { ensureUserProvisioned } from '@/lib/supabase/provisioning'
 
-// Magic-link / OAuth callback: exchange the code for a session, then land on /feed.
+// Magic-link / OAuth callback: exchange the code for a session, provision the
+// vibemap.users row, then route by onboarding state — new users meet Volly at
+// /welcome, returning users go straight to /feed.
 export async function GET(req: Request) {
   const code = new URL(req.url).searchParams.get('code')
 
@@ -21,6 +23,17 @@ export async function GET(req: Request) {
   // Provision the vibemap.users row before redirecting — all downstream tables FK to it.
   if (data.user) {
     await ensureUserProvisioned(supabase, data.user)
+
+    // Route by onboarding state: NULL → first-run welcome, otherwise the feed.
+    const { data: row } = await supabase
+      .schema('vibemap')
+      .from('users')
+      .select('onboarding_completed_at')
+      .eq('id', data.user.id)
+      .single()
+
+    const dest = row?.onboarding_completed_at ? '/feed' : '/welcome'
+    return NextResponse.redirect(new URL(dest, req.url))
   }
 
   return NextResponse.redirect(new URL('/feed', req.url))
