@@ -30,3 +30,13 @@ export function resolveStep(answeredCount: number, requestedStep: number): StepR
 
   return valid ? { kind: 'render', step: requestedStep } : { kind: 'redirect', step: resumeStep }
 }
+
+export type NextDestination = { kind: 'step'; step: number } | { kind: 'complete' }
+
+// After an answer is submitted at currentStep, where does the flow go next? Pure
+// (no DB/JSX) so submitAnswer's forward motion is unit-testable. The action maps
+// 'step' to /onboarding/[step] and 'complete' to /onboarding/complete (C.4).
+export function nextDestination(currentStep: number, total: number = TOTAL_QUESTIONS): NextDestination {
+  // Defensive >= : the final question (or any overflow) hands off to completion.
+  return currentStep >= total ? { kind: 'complete' } : { kind: 'step', step: currentStep + 1 }
+}

@@ -4,6 +4,7 @@ import { ensureUserProvisioned } from '@/lib/supabase/provisioning'
 import { resolveStep, TOTAL_QUESTIONS } from '@/lib/onboarding/steps'
 import { AuroraBackground } from '@/components/ui/AuroraBackground'
 import { QuestionCard } from '@/components/onboarding/QuestionCard'
+import { submitAnswer } from './actions'
 
 type AnswerOption = { key: string; label: string }
 
@@ -34,12 +35,14 @@ export default async function OnboardingStepPage({
     .single()
   if (userRow?.onboarding_completed_at) redirect('/feed')
 
-  // How many questions this user has answered (RLS scopes the count to them).
-  const { count } = await supabase
+  // This user's answers (RLS scopes the rows to them). One read does double duty:
+  // the count drives the step-access guard, and the matching row (found after we
+  // know the question id) seeds the back-edit highlight — no extra round-trip.
+  const { data: answers } = await supabase
     .schema('vibemap')
     .from('user_answers')
-    .select('*', { count: 'exact', head: true })
-  const answeredCount = count ?? 0
+    .select('question_id, answer_key')
+  const answeredCount = answers?.length ?? 0
 
   const resolution = resolveStep(answeredCount, Number(params.step))
   if (resolution.kind === 'complete') redirect('/onboarding/complete')
@@ -57,6 +60,8 @@ export default async function OnboardingStepPage({
   if (!question) notFound()
 
   const options = question.options as AnswerOption[]
+  // Prior answer for this question (back-edit) — undefined on a fresh question.
+  const selectedKey = answers?.find((a) => a.question_id === question.id)?.answer_key
 
   return (
     <AuroraBackground>
@@ -65,6 +70,8 @@ export default async function OnboardingStepPage({
           q={{ text: question.text, accent_word: question.accent_word, options }}
           step={resolution.step}
           total={TOTAL_QUESTIONS}
+          submitAction={submitAnswer.bind(null, question.id, resolution.step)}
+          selectedKey={selectedKey}
         />
       </main>
     </AuroraBackground>

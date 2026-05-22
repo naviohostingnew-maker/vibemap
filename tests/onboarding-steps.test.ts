@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
 // Relative import with .ts extension — node:test does not resolve the webpack '@/' alias.
-import { resolveStep, TOTAL_QUESTIONS } from '../lib/onboarding/steps.ts'
+import { resolveStep, nextDestination, TOTAL_QUESTIONS } from '../lib/onboarding/steps.ts'
 
 test('TOTAL_QUESTIONS = 20', () => {
   assert.equal(TOTAL_QUESTIONS, 20)
@@ -45,4 +45,14 @@ test('all answered => complete (>= boundary incl. anomalous overflow)', () => {
   assert.deepEqual(resolveStep(20, 20), { kind: 'complete' })
   assert.deepEqual(resolveStep(20, 1), { kind: 'complete' })
   assert.deepEqual(resolveStep(21, 5), { kind: 'complete' }) // defensive >=
+})
+
+test('nextDestination: mid-flow advances to step+1', () => {
+  assert.deepEqual(nextDestination(1), { kind: 'step', step: 2 })
+  assert.deepEqual(nextDestination(19), { kind: 'step', step: 20 })
+})
+
+test('nextDestination: final question (and overflow) hands off to complete', () => {
+  assert.deepEqual(nextDestination(20), { kind: 'complete' })
+  assert.deepEqual(nextDestination(21), { kind: 'complete' }) // defensive >=
 })
