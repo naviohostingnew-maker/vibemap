@@ -181,7 +181,7 @@ background: linear-gradient(110deg, var(--accent-magenta), var(--accent-orange))
 ```
 
 ### Wordmark
-- Family: **Instrument Serif** italic
+- Family: **Playfair Display** italic
 - Weight: 400
 - Size: 22px / line-height 1.0
 - Letter-spacing: -0.02em
@@ -201,7 +201,7 @@ background: linear-gradient(110deg, var(--accent-magenta), var(--accent-orange))
 ### Поведение
 - Split текста на `before` + `accent` + `after` по первому case-sensitive вхождению.
 - Рендер: `<span>{before}<em className="accent-word">{accent}</em>{after}</span>`
-- Стиль `.accent-word`: Instrument Serif italic + accent gradient на background-clip:text.
+- Стиль `.accent-word`: Playfair Display italic + accent gradient на background-clip:text.
 - Edge case: если `accent` не найден в `text` — `console.warn` в dev, рендер `text` без эффекта.
 
 ### Где используется
@@ -255,7 +255,7 @@ Volly = проактивный AI-спутник с памятью (см. claude
 - Drop shadows на UI элементах (тяжело для светлой эстетики; используем translucency + blur вместо)
 - Жирные borders > 1px (если только не специальный focus state)
 - Чёрный pure `#000` (нарушает ink-tone — всегда `--ink: #2a1832`)
-- Bold weights на серифе Instrument Serif (он только 400)
+- Тяжёлый Playfair Display (600/700) по умолчанию для display-текста — убивает воздушность Aurora. Default серифа = 400; веса 500–700 — только точечный акцент (см. §2).
 - Несколько accent-gradient слов на одном экране
 - Solid CTA не на ink-цвет
 - Mesh-blob без cream базового фона (теряется paper-tone)
