@@ -2,12 +2,14 @@ import { redirect, notFound } from 'next/navigation'
 import { createServerClient } from '@/lib/supabase/server'
 import { ensureUserProvisioned } from '@/lib/supabase/provisioning'
 import { resolveStep, TOTAL_QUESTIONS } from '@/lib/onboarding/steps'
+import { AuroraBackground } from '@/components/ui/AuroraBackground'
+import { QuestionCard } from '@/components/onboarding/QuestionCard'
 
 type AnswerOption = { key: string; label: string }
 
-// Dynamic 20Q onboarding route. C.1 scope: auth + provision gate, step-access
-// guard (resume + manual-URL protection), question fetch. Rendering is a bare
-// placeholder on purpose — real Aurora styling lands in C.2 (after tokens sync).
+// Dynamic 20Q onboarding route. Auth + provision gate, step-access guard
+// (resume + manual-URL protection), question fetch, then the Aurora question
+// card. Option interactivity (submitAnswer) is wired in C.3.
 export default async function OnboardingStepPage({
   params,
 }: {
@@ -56,21 +58,15 @@ export default async function OnboardingStepPage({
 
   const options = question.options as AnswerOption[]
 
-  // Placeholder markup — no Aurora styling yet (C.2 guardrail). Proves the data
-  // flow: gate -> guard -> fetch -> render the right question for the step.
   return (
-    <main>
-      <p>
-        {resolution.step} / {TOTAL_QUESTIONS}
-      </p>
-      <h1>{question.text}</h1>
-      <ul>
-        {options.map((opt) => (
-          <li key={opt.key}>
-            {opt.key}. {opt.label}
-          </li>
-        ))}
-      </ul>
-    </main>
+    <AuroraBackground>
+      <main className="flex min-h-screen items-center justify-center px-[26px] py-7">
+        <QuestionCard
+          q={{ text: question.text, accent_word: question.accent_word, options }}
+          step={resolution.step}
+          total={TOTAL_QUESTIONS}
+        />
+      </main>
+    </AuroraBackground>
   )
 }

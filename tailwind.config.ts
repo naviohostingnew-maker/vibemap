@@ -31,8 +31,9 @@ const config: Config = {
         // Aurora — accent gradient stops
         "accent-magenta": "#d4537e",
         "accent-orange": "#ef9f27",
-        // Aurora — glass surface fill
+        // Aurora — glass surface fill (tokens §4 split: #b0 decorative / #d0 text-heavy)
         "glass-bg": "#ffffffb0",
+        "glass-bg-strong": "#ffffffd0",
       },
       borderRadius: {
         card: "16px",

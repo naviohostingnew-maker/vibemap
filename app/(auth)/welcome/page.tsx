@@ -17,10 +17,9 @@ export default async function WelcomePage() {
     <AuroraBackground>
       <main className="flex min-h-screen items-center justify-center px-6 py-12">
         <div
-          className="w-full max-w-md rounded-card border border-white p-8 text-center"
+          // bg-glass-bg-strong = tokens §4 text-heavy fill (#d0); was inline #ffffffd0
+          className="w-full max-w-md rounded-card border border-white bg-glass-bg-strong p-8 text-center"
           style={{
-            // raised alpha (tokens §4) for long-text readability over the mesh
-            background: '#ffffffd0',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
           }}
