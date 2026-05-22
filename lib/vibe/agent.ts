@@ -1,4 +1,4 @@
-import { anthropic, VIBE_MODEL } from '@/lib/anthropic/client';
+import { getAnthropic, VIBE_MODEL } from '@/lib/anthropic/client';
 import { vibeTools } from './tools';
 
 const SYSTEM_PROMPT = `Ты — Вайб, персональный AI-консьерж жизни в приложении VibeMap.
@@ -13,7 +13,7 @@ Sprint 0: все custom-инструменты возвращают мок-да�
 messages → tool_use → tool_result → final answer работает на стеке.`;
 
 export async function vibeRespond(userMessage: string) {
-  const response = await anthropic.messages.create({
+  const response = await getAnthropic().messages.create({
     model: VIBE_MODEL,
     max_tokens: 1024,
     system: SYSTEM_PROMPT,
