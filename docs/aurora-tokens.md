@@ -162,6 +162,20 @@ transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms;
 - Outlined: `1px solid var(--ink-30)`, фон `transparent`, текст `--ink`
 - Ghost: фон `transparent`, текст `--ink-70`, hover → `--ink`
 
+### Option button — выбираемая опция (онбординг 20Q)
+Не CTA: тап = мгновенная запись ответа (instant submit). Состояния:
+
+| Состояние | Border | Background | Индикатор |
+|---|---|---|---|
+| idle | `1px solid var(--ink-30)` | `#ffffff` alpha ~50% | — |
+| hover | `1px solid var(--ink)` | `#ffffff` alpha ~80% | — |
+| selected | `1px solid var(--ink)` | `#ffffff` solid | inline-SVG галочка справа |
+
+- **Selected-галочка:** 16×16, `stroke: var(--ink)`, stroke-width 1.5, round caps/joins, `aria-hidden`. Это единственный признак, которого hover не порождает — однозначный дифференциатор selected ↔ hover.
+- Выбранность — в семантике: `aria-pressed={true}` на `<button>`, не только пиксели.
+- **accent-gradient на опции запрещён** — правило «один accent-gradient на экран» (§2/§10), он занят H2 accent-word вопроса.
+- Без drop-shadow, border не толще 1px (§10).
+
 ### Правила
 - На один экран — **один primary CTA**. Если кажется что нужны два — пересмотри иерархию.
 - CTA copy должен быть energy ("Поехали", "Начать", "Дальше"), а не транзакционным ("Продолжить", "Отправить").
