@@ -26,7 +26,7 @@ export function QuestionCard({ q, step, total, submitAction, selectedKey }: Ques
 
   return (
     <div
-      className="w-full max-w-md rounded-card border border-white bg-glass-bg-strong p-7"
+      className="w-full max-w-md rounded-card border border-white bg-glass-bg-strong p-7 lg:max-w-lg lg:p-9"
       style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
     >
       <div className="flex items-center gap-3">
@@ -41,7 +41,7 @@ export function QuestionCard({ q, step, total, submitAction, selectedKey }: Ques
         </span>
       </div>
 
-      <h2 className="mt-6 font-display text-[2rem] leading-[1.08] text-ink">
+      <h2 className="mt-6 text-balance font-display text-[2rem] leading-[1.08] text-ink">
         <AccentWord text={q.text} accent={q.accent_word} />
       </h2>
 
