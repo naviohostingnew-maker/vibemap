@@ -19,3 +19,9 @@ export function getAnthropic(): Anthropic {
 }
 
 export const VIBE_MODEL = 'claude-opus-4-7';
+
+// Reveal vibe-profile generation runs on Sonnet (decision Ф1а: low-frequency,
+// showcase-quality call — quality over economy). Kept as its own constant so
+// tuning the Reveal model never shifts the Sprint-0 tool-use agent (VIBE_MODEL,
+// Opus) and vice versa.
+export const REVEAL_MODEL = 'claude-sonnet-4-6';
