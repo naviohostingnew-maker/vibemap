@@ -1,4 +1,4 @@
-import { createServerClient as createSupabaseServerClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient as createSupabaseServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // Refreshes the Supabase auth session on every matched request (canonical ssr pattern).
