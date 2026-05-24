@@ -4,8 +4,11 @@ import type { FeedCard as FeedCardData } from '@/lib/vibe/feed/cards'
 interface FeedCardProps {
   card: FeedCardData
   // Volly's per-card comment. A string -> rendered in the §9 speaker block. Undefined
-  // -> the comment is still generating, so the slot shimmers (1.3.2.B.2 fills it).
+  // -> not generated yet: shimmers, unless the batch failed (commentsFailed).
   comment?: string
+  // Batch generation failed -> the slot shows a quiet placeholder instead of an
+  // infinite shimmer (a failed batch never resolves). Retry lives in FeedCommentSync.
+  commentsFailed: boolean
   // Whether the current user has liked this card (Ф4). B.1 is presentational only —
   // the heart reflects the prop; the interactive <LikeButton> wraps this slot in B.3.
   liked: boolean
@@ -16,7 +19,7 @@ interface FeedCardProps {
 // note as a named reply. The §9 "Volly speaks" block mirrors RevealCard verbatim
 // (shared pattern — must stay identical; <VollySpeaks> extraction is backlog 0.1.3).
 // The static card is the suggestion; the Volly comment is the personalizing layer.
-export function FeedCard({ card, comment, liked }: FeedCardProps) {
+export function FeedCard({ card, comment, commentsFailed, liked }: FeedCardProps) {
   return (
     <div
       className="w-full rounded-card border border-white bg-glass-bg-strong p-7"
@@ -53,14 +56,17 @@ export function FeedCard({ card, comment, liked }: FeedCardProps) {
           />
           <span className="font-display text-[15px] italic leading-none text-ink">Volly</span>
         </div>
-        {comment === undefined ? (
-          // Comment still generating — shimmer slot (reuses .reveal-shimmer, no new class).
+        {comment !== undefined ? (
+          <p className="mt-2 font-display text-[15px] italic leading-[1.5] text-rose-deep">{comment}</p>
+        ) : commentsFailed ? (
+          // Failed batch — quiet static placeholder (genderless), never an endless shimmer.
+          <p className="mt-2 font-body text-[13px] leading-[1.5] text-ink-50">Впечатления Volly появятся позже.</p>
+        ) : (
+          // Still generating — shimmer slot (reuses .reveal-shimmer, no new class).
           <div className="mt-3 space-y-2" aria-hidden>
             <div className="reveal-shimmer h-3 w-full rounded-pill opacity-70" />
             <div className="reveal-shimmer h-3 w-2/3 rounded-pill opacity-70" />
           </div>
-        ) : (
-          <p className="mt-2 font-display text-[15px] italic leading-[1.5] text-rose-deep">{comment}</p>
         )}
       </div>
     </div>

@@ -5,6 +5,7 @@ import { ARCHETYPES } from '@/lib/vibe/reveal/archetypes'
 import { feedCardsForArchetype } from '@/lib/vibe/feed/cards'
 import type { ArchetypeSlug } from '@/lib/vibe/reveal/parse'
 import { FeedCard } from '@/components/feed/FeedCard'
+import { FeedCommentSync } from '@/components/feed/FeedCommentSync'
 
 // /feed — the recommendation surface (decision Ф1=A). Self-gates like /reveal: auth ->
 // onboarding finished -> ready vibe-profile, else redirect where the user needs to be.
@@ -45,26 +46,38 @@ export default async function FeedPage() {
   const meta = ARCHETYPES.find((a) => a.slug === profile.archetype)
   const cards = feedCardsForArchetype(profile.archetype as ArchetypeSlug)
 
-  // Volly's per-card comments (card_id -> text). Absent until POST /api/vibe/feed runs
-  // (1.3.2.B.2); until then every card's slot shimmers.
+  // Volly's per-card comments (card_id -> text) + batch status. Absent/not-ready until
+  // POST /api/vibe/feed resolves: while not 'ready' the slots shimmer and <FeedCommentSync>
+  // drives generation; 'failed' shows a quiet placeholder + retry banner instead.
   const { data: commentsRow } = await supabase
     .schema('vibemap')
     .from('user_feed_comments')
-    .select('comments')
+    .select('comments, status')
     .eq('user_id', user.id)
     .maybeSingle()
   const comments = (commentsRow?.comments ?? {}) as Record<string, string>
+  const commentsReady = commentsRow?.status === 'ready'
+  const commentsFailed = commentsRow?.status === 'failed'
 
   return (
     <main className="mx-auto min-h-screen max-w-md px-[26px] pt-16">
       <h1 className="font-display text-4xl leading-none text-ink">Лента</h1>
       {meta && <p className="mt-2 font-body text-sm text-ink-70">Идеи под ваш вайб · {meta.name}</p>}
 
-      <div className="mt-7 space-y-5">
+      <div className="mt-7 space-y-5" aria-busy={!commentsReady && !commentsFailed}>
         {cards.map((card) => (
-          <FeedCard key={card.id} card={card} comment={comments[card.id]} liked={false} />
+          <FeedCard
+            key={card.id}
+            card={card}
+            comment={comments[card.id]}
+            commentsFailed={commentsFailed}
+            liked={false}
+          />
         ))}
       </div>
+
+      {/* Drive comment generation while the batch isn't ready (sibling, explicit re-POST poll). */}
+      {!commentsReady && <FeedCommentSync />}
     </main>
   )
 }
