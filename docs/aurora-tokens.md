@@ -100,7 +100,7 @@ color: transparent;
 | `r-input` | `12px` | Текстовые поля |
 
 ### Spacing (Tailwind-compatible)
-- Внутренний padding экрана: `28px 26px` (top/bottom × left/right)
+- Внутренний padding экрана: `28px 26px` (top/bottom × left/right) — конвенция onboarding/`(auth)`-поверхностей; header-less `(app)`-shell поверхности (лента/я) задают собственный верхний воздух (напр. `pt-16`), горизонтальный `26px` сохраняют.
 - Gap между секциями экрана: `22px–28px` (mood-зависимо)
 - Gap между карточками ответов: `9px` (плотно, чтобы 4 варианта влезли)
 - Внутренний padding карточки ответа: `14px 16px`

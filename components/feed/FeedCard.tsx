@@ -57,9 +57,12 @@ export function FeedCard({ card, comment, commentsFailed, liked }: FeedCardProps
           <p className="mt-2 font-body text-[13px] leading-[1.5] text-ink-50">Впечатления Volly появятся позже.</p>
         ) : (
           // Still generating — shimmer slot (reuses .reveal-shimmer, no new class).
+          // Three lines approximate a typical Volly comment's height so the shimmer ->
+          // text swap on router.refresh barely reflows the stacked cards below.
           <div className="mt-3 space-y-2" aria-hidden>
             <div className="reveal-shimmer h-3 w-full rounded-pill opacity-70" />
-            <div className="reveal-shimmer h-3 w-2/3 rounded-pill opacity-70" />
+            <div className="reveal-shimmer h-3 w-full rounded-pill opacity-70" />
+            <div className="reveal-shimmer h-3 w-1/2 rounded-pill opacity-70" />
           </div>
         )}
       </div>

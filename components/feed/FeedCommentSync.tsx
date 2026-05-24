@@ -18,27 +18,39 @@ const POLL_MS = 2500
 export function FeedCommentSync() {
   const router = useRouter()
   const [failed, setFailed] = useState(false)
+  // Manual retry shows an active in-flight banner instead of vanishing into null:
+  // without it, clicking retry calls setFailed(false) -> the banner unmounts -> dead
+  // air until the re-POST resolves and the failed banner flickers back. The initial
+  // auto-fire stays silent (run(false)) — the cards already shimmer for that.
+  const [retrying, setRetrying] = useState(false)
   const firedRef = useRef(false)
 
-  const run = async () => {
+  const run = async (manual = false) => {
+    if (manual) setRetrying(true)
     setFailed(false)
     try {
       const res = await fetch('/api/vibe/feed', { method: 'POST' })
       const body = (await res.json().catch(() => ({}))) as { status?: string }
       if (!res.ok) {
         setFailed(true)
+        setRetrying(false)
         return
       }
       if (body.status === 'ready') {
+        // router.refresh re-reads the row and the page unmounts this sibling — no
+        // need to clear retrying (the active banner lives until the swap lands).
         router.refresh()
       } else if (body.status === 'generating') {
-        // Another request is mid-flight — re-POST shortly until the row flips.
-        setTimeout(() => void run(), POLL_MS)
+        // Another request is mid-flight — re-POST shortly until the row flips. Keep
+        // the in-flight banner up across the poll loop when this was a manual retry.
+        setTimeout(() => void run(manual), POLL_MS)
       } else {
         setFailed(true)
+        setRetrying(false)
       }
     } catch {
       setFailed(true)
+      setRetrying(false)
     }
   }
 
@@ -50,15 +62,26 @@ export function FeedCommentSync() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Genderless copy — no past-tense gender (decision: gender-guard 1.3.1.C/D).
+  if (retrying) {
+    // In-flight feedback: the same banner shell, but a shimmer line stands in for the
+    // retry button while the re-POST runs (reuses .reveal-shimmer, reduced-motion safe).
+    return (
+      <div className="mt-5 rounded-card border border-ink-30 bg-glass-bg p-4 text-center">
+        <p className="font-body text-sm text-ink-70">Загружаю впечатления Volly…</p>
+        <div className="reveal-shimmer mx-auto mt-3 h-3 w-2/3 rounded-pill opacity-70" aria-hidden />
+      </div>
+    )
+  }
+
   if (!failed) return null
 
-  // Genderless copy — no past-tense gender (decision: gender-guard 1.3.1.C/D).
   return (
     <div className="mt-5 rounded-card border border-ink-30 bg-glass-bg p-4 text-center">
       <p className="font-body text-sm text-ink-70">Не удалось загрузить впечатления Volly.</p>
       <button
         type="button"
-        onClick={() => void run()}
+        onClick={() => void run(true)}
         className="mt-2 rounded-pill border border-ink-30 px-4 py-1.5 font-body text-sm text-ink-70 transition-colors hover:border-ink hover:text-ink"
       >
         Попробовать снова

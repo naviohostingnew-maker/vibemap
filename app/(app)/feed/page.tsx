@@ -77,7 +77,7 @@ export default async function FeedPage() {
       <h1 className="font-display text-4xl leading-none text-ink">Лента</h1>
       {meta && <p className="mt-2 font-body text-sm text-ink-70">Идеи под ваш вайб · {meta.name}</p>}
 
-      <div className="mt-7 space-y-5" aria-busy={!commentsReady && !commentsFailed}>
+      <div className="mt-8 space-y-6" aria-busy={!commentsReady && !commentsFailed}>
         {cards.map((card) => (
           <FeedCard
             key={card.id}
