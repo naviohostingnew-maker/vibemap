@@ -1,5 +1,5 @@
-import { Heart } from 'lucide-react'
 import type { FeedCard as FeedCardData } from '@/lib/vibe/feed/cards'
+import { LikeButton } from './LikeButton'
 
 interface FeedCardProps {
   card: FeedCardData
@@ -9,8 +9,8 @@ interface FeedCardProps {
   // Batch generation failed -> the slot shows a quiet placeholder instead of an
   // infinite shimmer (a failed batch never resolves). Retry lives in FeedCommentSync.
   commentsFailed: boolean
-  // Whether the current user has liked this card (Ф4). B.1 is presentational only —
-  // the heart reflects the prop; the interactive <LikeButton> wraps this slot in B.3.
+  // Whether the current user has liked this card (Ф4) — drives the LikeButton's
+  // initial state; the button then owns optimistic toggling.
   liked: boolean
 }
 
@@ -30,15 +30,9 @@ export function FeedCard({ card, comment, commentsFailed, liked }: FeedCardProps
         <span className="font-body text-[11px] uppercase leading-[1.3] tracking-[0.04em] text-ink-50">
           {card.kind}
         </span>
-        {/* Like heart — presentational in B.1 (reflects `liked`); no accent gradient
-            here (§ one-accent-per-screen, 6 cards). Interactive toggle lands in B.3. */}
-        <Heart
-          size={20}
-          strokeWidth={1.5}
-          aria-hidden
-          className={liked ? 'text-rose-deep' : 'text-ink-30'}
-          fill={liked ? 'currentColor' : 'none'}
-        />
+        {/* Like heart (Ф4) — interactive toggle; no accent gradient (§ one-accent-
+            per-screen, 6 cards): liked = rose-deep fill, else ink-30 outline. */}
+        <LikeButton cardId={card.id} liked={liked} />
       </div>
 
       {/* Plain Playfair title — no accent-word: 6 cards would be 6 accents (§2). */}

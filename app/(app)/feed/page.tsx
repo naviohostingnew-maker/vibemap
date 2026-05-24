@@ -59,6 +59,19 @@ export default async function FeedPage() {
   const commentsReady = commentsRow?.status === 'ready'
   const commentsFailed = commentsRow?.status === 'failed'
 
+  // Ф4 — which cards the user has liked (feed_like memories). Set of card_id.
+  const { data: likeRows } = await supabase
+    .schema('vibemap')
+    .from('vibe_memories')
+    .select('metadata')
+    .eq('user_id', user.id)
+    .eq('metadata->>source', 'feed_like')
+  const likedIds = new Set(
+    (likeRows ?? [])
+      .map((r) => (r.metadata as { card_id?: string } | null)?.card_id)
+      .filter((id): id is string => Boolean(id)),
+  )
+
   return (
     <main className="mx-auto min-h-screen max-w-md px-[26px] pt-16">
       <h1 className="font-display text-4xl leading-none text-ink">Лента</h1>
@@ -71,7 +84,7 @@ export default async function FeedPage() {
             card={card}
             comment={comments[card.id]}
             commentsFailed={commentsFailed}
-            liked={false}
+            liked={likedIds.has(card.id)}
           />
         ))}
       </div>
