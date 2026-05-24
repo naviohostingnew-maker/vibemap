@@ -2,14 +2,16 @@ import { redirect } from 'next/navigation'
 import { createServerClient } from '@/lib/supabase/server'
 import { ensureUserProvisioned } from '@/lib/supabase/provisioning'
 import { ARCHETYPES } from '@/lib/vibe/reveal/archetypes'
+import { feedCardsForArchetype } from '@/lib/vibe/feed/cards'
+import type { ArchetypeSlug } from '@/lib/vibe/reveal/parse'
+import { FeedCard } from '@/components/feed/FeedCard'
 
-// /feed — the recommendation surface (decision Ф1=A). Sprint 1.3.2.A ships the SHELL
-// only: the page now EXISTS (it was a 404 that RevealCard's CTA already links to),
-// self-gates, and renders inside the (app) bottom-nav shell. Card render + Volly
-// comments + Ф4 likes are 1.3.2.B — this body is intentionally thin (header +
-// placeholder) and makes NO call to /api/vibe/feed yet. Self-gate mirrors /reveal:
-// auth -> onboarding finished -> ready vibe-profile, else redirect where the user
-// needs to be (the archetype is what would pick the card set in 1.3.2.B).
+// /feed — the recommendation surface (decision Ф1=A). Self-gates like /reveal: auth ->
+// onboarding finished -> ready vibe-profile, else redirect where the user needs to be.
+// 1.3.2.B.1 renders the archetype's static card set; each card's Volly comment comes
+// from the user_feed_comments row (card_id -> text). No comments row yet -> every slot
+// shimmers. The comment generation (POST /api/vibe/feed) is wired in 1.3.2.B.2; the Ф4
+// like read is wired in 1.3.2.B.3 (liked is false for all cards here).
 export default async function FeedPage() {
   const supabase = createServerClient()
 
@@ -41,16 +43,27 @@ export default async function FeedPage() {
   if (profile?.status !== 'ready' || !profile.archetype) redirect('/reveal')
 
   const meta = ARCHETYPES.find((a) => a.slug === profile.archetype)
+  const cards = feedCardsForArchetype(profile.archetype as ArchetypeSlug)
+
+  // Volly's per-card comments (card_id -> text). Absent until POST /api/vibe/feed runs
+  // (1.3.2.B.2); until then every card's slot shimmers.
+  const { data: commentsRow } = await supabase
+    .schema('vibemap')
+    .from('user_feed_comments')
+    .select('comments')
+    .eq('user_id', user.id)
+    .maybeSingle()
+  const comments = (commentsRow?.comments ?? {}) as Record<string, string>
 
   return (
     <main className="mx-auto min-h-screen max-w-md px-[26px] pt-16">
       <h1 className="font-display text-4xl leading-none text-ink">Лента</h1>
       {meta && <p className="mt-2 font-body text-sm text-ink-70">Идеи под ваш вайб · {meta.name}</p>}
 
-      {/* Thin placeholder — the card render + Volly comments arrive in 1.3.2.B. */}
-      <div className="mt-7 rounded-card border border-white bg-glass-bg p-7 text-center">
-        <p className="font-body text-ink-70">Volly подбирает идеи под ваш вечер.</p>
-        <p className="mt-1 font-body text-sm text-ink-50">Скоро здесь появятся карточки.</p>
+      <div className="mt-7 space-y-5">
+        {cards.map((card) => (
+          <FeedCard key={card.id} card={card} comment={comments[card.id]} liked={false} />
+        ))}
       </div>
     </main>
   )
