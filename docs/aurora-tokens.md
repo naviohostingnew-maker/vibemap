@@ -176,6 +176,13 @@ transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms;
 - **accent-gradient на опции запрещён** — правило «один accent-gradient на экран» (§2/§10), он занят H2 accent-word вопроса.
 - Без drop-shadow, border не толще 1px (§10).
 
+### Input field — текстовое поле (login email и т.п.)
+- Радиус: `var(--r-input)` (12px). Фон: solid `#ffffff` (на стекле — плотное поле, не glass).
+- Border: idle `1px solid var(--ink-30)` → focus `1px solid var(--ink)`.
+- Focus-visible: outline `2px solid var(--ink)`, offset `2px` (клавиатурный фокус; на мышином — только смена border).
+- Текст: `--ink`, 16px Manrope. Placeholder: `--ink-50`. Padding: `14px 16px`. Без shadow.
+- Ошибка: form-level inline текст `--rose-deep` (нового error-цвета не вводим).
+
 ### Правила
 - На один экран — **один primary CTA**. Если кажется что нужны два — пересмотри иерархию.
 - CTA copy должен быть energy ("Поехали", "Начать", "Дальше"), а не транзакционным ("Продолжить", "Отправить").
