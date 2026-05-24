@@ -12,7 +12,10 @@ import { Sparkles, User } from 'lucide-react'
 // so no extra tabs here. Active tab is derived from the route (usePathname): ink +
 // a ~5px pip; inactive is ink-30. Line icons at stroke 1.5 to match the inline-SVG
 // line language of OptionList (Sparkles = AI-curated feed; NOT Compass, which reads
-// as Discovery — a separate Sprint 2 mode).
+// as Discovery — a separate Sprint 2 mode). The active pip is the accent gradient
+// (§2/§6 brand-dot hue) sitting ABOVE the icon — decision variant B: a tiny warm
+// locator, not an ink dot. Inactive keeps a transparent pip so icons stay aligned.
+const ACCENT_PIP = 'linear-gradient(110deg, #d4537e, #ef9f27)'
 const TABS = [
   { href: '/feed', label: 'Лента', Icon: Sparkles },
   { href: '/me', label: 'Я', Icon: User },
@@ -43,12 +46,13 @@ export function BottomNav() {
                   active ? 'text-ink' : 'text-ink-30'
                 }`}
               >
-                <Icon size={22} strokeWidth={1.5} aria-hidden />
-                <span className="leading-none">{label}</span>
                 <span
                   aria-hidden
-                  className={`mt-0.5 h-[5px] w-[5px] rounded-full ${active ? 'bg-ink' : 'bg-transparent'}`}
+                  className="h-[5px] w-[5px] rounded-full"
+                  style={active ? { backgroundImage: ACCENT_PIP } : undefined}
                 />
+                <Icon size={22} strokeWidth={1.5} aria-hidden />
+                <span className="leading-none">{label}</span>
               </Link>
             </li>
           )
