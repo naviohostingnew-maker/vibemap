@@ -48,7 +48,7 @@ export function RevealCard({ vibeTitle, vibeSummary, traits, vollyNote, archetyp
         </p>
       )}
 
-      <h1 className="mt-1 font-display text-[2.875rem] leading-[1.05] text-ink">
+      <h1 className="mt-1 font-display text-[2rem] leading-[1.1] text-ink lg:text-[2.875rem] lg:leading-[1.05]">
         <span className="accent-word">{vibeTitle}</span>
       </h1>
 

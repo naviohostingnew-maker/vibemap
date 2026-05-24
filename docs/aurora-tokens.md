@@ -72,7 +72,7 @@ color: transparent;
 ### Scale (мобильный фокус, 375px base)
 | Token | Size / line-height | Где |
 |---|---|---|
-| `display-xl` | 46px / 1.0 | Welcome H1, Reveal title |
+| `display-xl` | mobile 32px / 1.1 → `lg:` 46px / 1.05 | Welcome H1, Reveal title (hero). **Responsive-вилка** через `lg:`-брейкпоинт (как D.0/C.1, не clamp): на 390px крупный 46px-заголовок в 3–4 слова рвётся на 3 строки — мобильный шаг 32px держит его в 1–2 строки, на `lg`+ возвращается к 46px hero. Текст заголовка НЕ режем под фикс-размер. |
 | `display-lg` | 32px / 1.08 | Question H1 («В пятницу вечером ты *скорее*...») |
 | `display-md` | 24px / 1.1 | Section heading |
 | `body-lg` | 16px / 1.55 | Описание под H1 |
