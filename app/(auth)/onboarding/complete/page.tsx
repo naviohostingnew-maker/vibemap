@@ -60,7 +60,7 @@ export default async function OnboardingCompletePage() {
     .is('onboarding_completed_at', null)
   if (completeErr) throw completeErr
 
-  redirect('/feed')
+  redirect('/reveal')
 
   // Unreachable — every branch above redirects. Kept so the component has a return.
   return null
