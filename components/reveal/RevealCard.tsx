@@ -11,12 +11,15 @@ interface RevealCardProps {
   archetype: ArchetypeSlug
 }
 
-// The Reveal card — third wow-moment. Renders the ready vibe-profile over the
-// Aurora mesh: archetype hero image (Ф2=C static asset), gradient vibe_title,
-// summary, trait chips, and Volly's note. Structurally complete on Aurora tokens;
-// final visual polish lands in D.2.C. Server component (no interactivity).
+// The Reveal card — third wow-moment. Read top-to-bottom as a gift (D.2.C variant A,
+// single column both viewports): the archetype image is a restrained MOOD strip
+// (constrained height + fade so it melts into the glass, never dominates); the TEXT
+// carries the wow — gradient vibe_title (display-xl §2), summary, trait chips, and
+// Volly's note as a named reply (brand-dot + wordmark, §6/§9). Server component.
 export function RevealCard({ vibeTitle, vibeSummary, traits, vollyNote, archetype }: RevealCardProps) {
   const meta = ARCHETYPES.find((a) => a.slug === archetype)
+  // Fade the strip's lower edge into the glass — no hard rectangle (tokens §10).
+  const moodFade = 'linear-gradient(to bottom, #000 60%, transparent 100%)'
 
   return (
     <div
@@ -24,7 +27,10 @@ export function RevealCard({ vibeTitle, vibeSummary, traits, vollyNote, archetyp
       style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
     >
       {meta && (
-        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-portrait">
+        <div
+          className="relative h-40 w-full overflow-hidden rounded-portrait lg:h-52"
+          style={{ maskImage: moodFade, WebkitMaskImage: moodFade }}
+        >
           <Image
             src={meta.image}
             alt={meta.name}
@@ -37,16 +43,16 @@ export function RevealCard({ vibeTitle, vibeSummary, traits, vollyNote, archetyp
       )}
 
       {meta && (
-        <p className="mt-5 font-body text-[11px] uppercase leading-[1.3] tracking-[0.04em] text-ink-50">
+        <p className="mt-4 font-body text-[11px] uppercase leading-[1.3] tracking-[0.04em] text-ink-50">
           {meta.name}
         </p>
       )}
 
-      <h1 className="mt-1 font-display text-[2.5rem] leading-[1.05] text-ink">
+      <h1 className="mt-1 font-display text-[2.875rem] leading-[1.05] text-ink">
         <span className="accent-word">{vibeTitle}</span>
       </h1>
 
-      <p className="mt-4 font-body text-[16px] leading-[1.55] text-ink-70">{vibeSummary}</p>
+      <p className="mt-4 font-body text-[16px] leading-[1.6] text-ink-70">{vibeSummary}</p>
 
       {traits.length > 0 && (
         <ul className="mt-5 flex flex-wrap gap-2">
@@ -61,7 +67,18 @@ export function RevealCard({ vibeTitle, vibeSummary, traits, vollyNote, archetyp
         </ul>
       )}
 
-      <p className="mt-5 font-display text-[15px] italic leading-[1.5] text-rose-deep">{vollyNote}</p>
+      {/* Volly speaks — a reply from a named companion, not decorative copy (§9). */}
+      <div className="mt-6 border-t border-ink-30 pt-5">
+        <div className="flex items-center gap-2">
+          <span
+            aria-hidden
+            className="inline-block h-[9px] w-[9px] rounded-full"
+            style={{ backgroundImage: 'linear-gradient(110deg, var(--accent-magenta), var(--accent-orange))' }}
+          />
+          <span className="font-display text-[15px] italic leading-none text-ink">Volly</span>
+        </div>
+        <p className="mt-2 font-display text-[15px] italic leading-[1.5] text-rose-deep">{vollyNote}</p>
+      </div>
 
       <Link href="/feed" className="cta-pill mt-7 block w-full text-center">
         Дальше

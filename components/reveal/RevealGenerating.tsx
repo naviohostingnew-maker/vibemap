@@ -49,14 +49,16 @@ export function RevealGenerating() {
 
   return (
     <div
-      className="w-full max-w-md rounded-card border border-white bg-glass-bg-strong p-7 text-center lg:max-w-lg lg:p-9"
+      className="reveal-breathe w-full max-w-md rounded-card border border-white bg-glass-bg-strong p-7 text-center lg:max-w-lg lg:p-9"
       style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
       aria-busy="true"
     >
-      <div className="mx-auto h-1 w-24 overflow-hidden rounded-pill bg-ink-30">
-        <div className="h-full w-1/3 animate-pulse rounded-pill bg-ink-cta" />
+      {/* Shimmer placeholders — the card's title/text materializing (anticipation). */}
+      <div className="space-y-3" aria-hidden>
+        <div className="reveal-shimmer mx-auto h-7 w-3/4 rounded-pill" />
+        <div className="reveal-shimmer mx-auto h-3 w-1/2 rounded-pill opacity-70" />
       </div>
-      <h1 className="mt-6 font-display text-[1.75rem] leading-[1.1] text-ink">
+      <h1 className="mt-7 font-display text-[1.75rem] leading-[1.1] text-ink">
         Volly изучает твой вайб…
       </h1>
       <p className="mt-3 font-body text-[15px] leading-[1.55] text-ink-70">
