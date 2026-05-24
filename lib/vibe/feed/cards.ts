@@ -92,3 +92,9 @@ export const FEED_CARDS: readonly FeedCard[] = [
   { id: 'urban_romantic-05', archetype: 'urban_romantic', kind: 'музыка', title: 'Саундтрек вечернего города', body: 'Chet Baker, «Chet Baker Sings» — хрупкий вокал и труба, под которые вечерний город становится чёрно-белым кино.' },
   { id: 'urban_romantic-06', archetype: 'urban_romantic', kind: 'ритуал', title: 'Кофе в том же кафе', body: 'Каждую неделю — чашка в любимом городском месте, всегда за тем же столиком. Маленький роман с городом длиною в привычку.' },
 ]
+
+// Pure selector — the 6 cards for one archetype, in their declared order. Used by
+// the feed-comment engine to assemble the LLM input; reads the data, never mutates it.
+export function feedCardsForArchetype(archetype: ArchetypeSlug): FeedCard[] {
+  return FEED_CARDS.filter((c) => c.archetype === archetype)
+}

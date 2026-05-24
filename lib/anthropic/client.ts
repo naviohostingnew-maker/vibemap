@@ -25,3 +25,8 @@ export const VIBE_MODEL = 'claude-opus-4-7';
 // tuning the Reveal model never shifts the Sprint-0 tool-use agent (VIBE_MODEL,
 // Opus) and vice versa.
 export const REVEAL_MODEL = 'claude-sonnet-4-6';
+
+// Feed Volly-comments run on Sonnet, same rationale as Reveal — a low-frequency,
+// per-user call where quality matters more than economy. Its own constant so its
+// tuning stays independent of REVEAL_MODEL and VIBE_MODEL.
+export const FEED_MODEL = 'claude-sonnet-4-6';
