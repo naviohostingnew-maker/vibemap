@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VibeMap v0.2 — каркас экранов прототипа</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+<style>
+:root{
+--color-background-primary:#ffffff;
+--color-background-secondary:#f3f2ee;
+--color-background-tertiary:#ebeae4;
+--color-text-primary:#1d1c1a;
+--color-text-secondary:#6c6a64;
+--color-text-tertiary:#9b9990;
+--color-border-tertiary:rgba(0,0,0,0.10);
+--color-border-secondary:rgba(0,0,0,0.22);
+--color-background-info:#E6F1FB;--color-text-info:#185FA5;
+--color-background-success:#EAF3DE;--color-text-success:#3B6D11;
+--color-background-warning:#FAEEDA;--color-text-warning:#854F0B;
+--border-radius-md:8px;--border-radius-lg:12px;--border-radius-xl:16px;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--color-background-tertiary);color:var(--color-text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+.page{max-width:1080px;margin:0 auto;padding:44px 24px 90px;}
+.page-title{font-size:27px;font-weight:600;margin:0 0 8px;}
+.page-sub{font-size:15px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.65;}
+.page-meta{font-size:13px;color:var(--color-text-tertiary);margin:0 0 40px;line-height:1.6;}
+.screen{margin-bottom:46px;}
+.screen-num{font-size:12px;font-weight:600;color:#D4537E;letter-spacing:0.04em;}
+.screen-title{font-size:20px;font-weight:600;margin:3px 0 4px;}
+.screen-desc{font-size:14px;color:var(--color-text-secondary);margin:0 0 16px;line-height:1.55;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+.archdiagram{background:#ffffff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:18px;max-width:720px;}
+.archdiagram .th{fill:#2c2c2a;}.archdiagram .t{fill:#444441;}.archdiagram .ts{fill:#5f5e5a;}
+.archdiagram .arr{stroke:#9b9990;fill:none;}
+.archdiagram .c-pink rect{fill:#FBEAF0;stroke:#993556;}.archdiagram .c-pink .th{fill:#72243E;}.archdiagram .c-pink .t{fill:#993556;}.archdiagram .c-pink .ts{fill:#993556;}
+.archdiagram .c-amber rect{fill:#FAEEDA;stroke:#854F0B;}.archdiagram .c-amber .th{fill:#633806;}.archdiagram .c-amber .t{fill:#854F0B;}.archdiagram .c-amber .ts{fill:#854F0B;}
+.archdiagram .c-purple rect{fill:#EEEDFE;stroke:#534AB7;}.archdiagram .c-purple .th{fill:#3C3489;}.archdiagram .c-purple .t{fill:#534AB7;}.archdiagram .c-purple .ts{fill:#534AB7;}
+.archdiagram .c-teal rect{fill:#E1F5EE;stroke:#0F6E56;}.archdiagram .c-teal .th{fill:#085041;}.archdiagram .c-teal .t{fill:#0F6E56;}.archdiagram .c-teal .ts{fill:#0F6E56;}
+.archdiagram .c-gray rect{fill:#F1EFE8;stroke:#5F5E5A;}.archdiagram .c-gray .th{fill:#2C2C2A;}.archdiagram .c-gray .t{fill:#444441;}.archdiagram .c-gray .ts{fill:#5F5E5A;}
+.archdiagram .c-green rect{fill:#EAF3DE;stroke:#3B6D11;}.archdiagram .c-green .th{fill:#27500A;}.archdiagram .c-green .ts{fill:#3B6D11;}
+.archdiagram .c-blue rect{fill:#E6F1FB;stroke:#185FA5;}.archdiagram .c-blue .th{fill:#0C447C;}.archdiagram .c-blue .ts{fill:#185FA5;}
+</style>
+</head>
+<body>
+<div class="page">
+<h1 class="page-title">VibeMap v0.2 — каркас экранов прототипа</h1>
+<p class="page-sub">Вайб-социальная сеть с внутренним ИИ-консьержем Волли. Каталоги мероприятий, ресторанов, концертов и поездок; Волли ищет, предлагает и бронирует под вайб-профиль; знакомства по вайб-мэтчу, друзья, приглашения, подарок билетов. 14 визуалов: карта архитектуры + 13 экранов кликабельного прототипа.</p>
+<p class="page-meta">Источник истины (текстовый UX/UI-спек, решённые форки) — claude_state, decision related_to='ux-design', project_slug='vibemap'. Дизайн-токены — docs/aurora-tokens.md. Эти макеты — визуальный референс. Граница прототипа: реально строится Волли-ИИ, весь UI и социальный граф; симулируются данные каталогов, брони и подарки билетов.</p>
+
+<div class="screen">
+<div class="screen-num">00 · АРХИТЕКТУРА</div>
+<div class="screen-title">Карта продукта</div>
+<div class="screen-desc">Слои: основа (готова) → вайб-профиль как движок персонализации → 4 раздела → Волли сквозным ИИ-слоем.</div>
+<div class="archdiagram">
+<svg width="100%" viewBox="0 0 680 540" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Архитектура прототипа VibeMap</title>
+<desc>Слоёная карта: основа, вайб-профиль-движок, четыре раздела, Волли как сквозной ИИ-слой.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<text class="th" x="40" y="32">Волли — сквозной ИИ-консьерж</text>
+<g class="c-pink"><rect x="40" y="44" width="600" height="62" rx="12" stroke-width="0.5"/>
+<text class="t" x="340" y="68" text-anchor="middle" dominant-baseline="central">Разговор · поиск по каталогам · подбор под вайб · бронь</text>
+<text class="ts" x="340" y="88" text-anchor="middle" dominant-baseline="central">присутствует в каждом разделе — это УТП</text></g>
+<line x1="160" y1="106" x2="160" y2="128" class="arr" marker-end="url(#arrow)"/>
+<line x1="320" y1="106" x2="320" y2="128" class="arr" marker-end="url(#arrow)"/>
+<line x1="480" y1="106" x2="480" y2="128" class="arr" marker-end="url(#arrow)"/>
+<line x1="600" y1="106" x2="600" y2="128" class="arr" marker-end="url(#arrow)"/>
+<g class="c-amber"><rect x="40" y="128" width="142" height="86" rx="10" stroke-width="0.5"/>
+<text class="th" x="111" y="150" text-anchor="middle" dominant-baseline="central">Каталоги</text>
+<text class="ts" x="111" y="172" text-anchor="middle" dominant-baseline="central">события, рестораны</text>
+<text class="ts" x="111" y="190" text-anchor="middle" dominant-baseline="central">концерты, поездки</text></g>
+<g class="c-purple"><rect x="194" y="128" width="142" height="86" rx="10" stroke-width="0.5"/>
+<text class="th" x="265" y="150" text-anchor="middle" dominant-baseline="central">Лента</text>
+<text class="ts" x="265" y="172" text-anchor="middle" dominant-baseline="central">подбор под вайб</text>
+<text class="ts" x="265" y="190" text-anchor="middle" dominant-baseline="central">активность друзей</text></g>
+<g class="c-teal"><rect x="348" y="128" width="142" height="86" rx="10" stroke-width="0.5"/>
+<text class="th" x="419" y="150" text-anchor="middle" dominant-baseline="central">Социальное</text>
+<text class="ts" x="419" y="172" text-anchor="middle" dominant-baseline="central">люди, друзья</text>
+<text class="ts" x="419" y="190" text-anchor="middle" dominant-baseline="central">приглашения, подарки</text></g>
+<g class="c-purple"><rect x="502" y="128" width="138" height="86" rx="10" stroke-width="0.5"/>
+<text class="th" x="571" y="150" text-anchor="middle" dominant-baseline="central">Я</text>
+<text class="ts" x="571" y="172" text-anchor="middle" dominant-baseline="central">вайб-профиль</text>
+<text class="ts" x="571" y="190" text-anchor="middle" dominant-baseline="central">брони, билеты</text></g>
+<line x1="340" y1="250" x2="340" y2="214" class="arr" marker-end="url(#arrow)"/>
+<g class="c-gray"><rect x="40" y="250" width="600" height="60" rx="12" stroke-width="0.5"/>
+<text class="th" x="340" y="272" text-anchor="middle" dominant-baseline="central">Вайб-профиль — движок персонализации</text>
+<text class="ts" x="340" y="292" text-anchor="middle" dominant-baseline="central">архетип и черты задают подбор, мэтчинг людей и ранжирование везде</text></g>
+<line x1="340" y1="368" x2="340" y2="310" class="arr" marker-end="url(#arrow)"/>
+<g class="c-gray"><rect x="40" y="368" width="600" height="60" rx="12" stroke-width="0.5"/>
+<text class="th" x="340" y="390" text-anchor="middle" dominant-baseline="central">Основа — готова</text>
+<text class="ts" x="340" y="410" text-anchor="middle" dominant-baseline="central">авторизация · онбординг 20 вопросов · Aurora-дизайн · деплой</text></g>
+<g class="c-green"><rect x="40" y="456" width="18" height="18" rx="4" stroke-width="0.5"/></g>
+<text class="ts" x="66" y="466" dominant-baseline="central">готово</text>
+<g class="c-blue"><rect x="150" y="456" width="18" height="18" rx="4" stroke-width="0.5"/></g>
+<text class="ts" x="176" y="466" dominant-baseline="central">строим по-настоящему: Волли-ИИ, лента, социальное</text>
+<g class="c-amber"><rect x="40" y="486" width="18" height="18" rx="4" stroke-width="0.5"/></g>
+<text class="ts" x="66" y="496" dominant-baseline="central">симулируем в прототипе: данные каталогов, брони и оплаты</text>
+</svg>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">01 · НАВИГАЦИЯ</div>
+<div class="screen-title">Навигация и поверхность Волли</div>
+<div class="screen-desc">Нижний таб-бар из 5 разделов; Волли — центральная вкладка + контекстная строка «спроси Волли» на контент-экранах.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 18px 12px;">
+      <span style="font-size:18px; font-weight:500;">Каталог</span>
+      <i class="ti ti-search" style="font-size:20px; color:var(--color-text-secondary);"></i>
+    </div>
+    <div style="margin:0 16px 16px; display:flex; align-items:center; gap:8px; background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:10px 12px;">
+      <i class="ti ti-sparkles" style="font-size:18px; color:#D4537E;"></i>
+      <span style="font-size:13px; color:var(--color-text-secondary);">Спроси Волли — что сегодня вечером?</span>
+    </div>
+    <div style="padding:0 16px; display:flex; flex-direction:column; gap:12px;">
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:92px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-music" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:10px 12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <span style="font-size:14px; font-weight:500;">Джаз на крыше</span>
+            <span style="font-size:11px; color:#993556; background:#FBEAF0; padding:2px 8px; border-radius:var(--border-radius-md); white-space:nowrap;">по вайбу</span>
+          </div>
+          <span style="font-size:12px; color:var(--color-text-secondary);">сегодня 20:00 · центр</span>
+        </div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:92px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-tools-kitchen-2" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:10px 12px;">
+          <span style="font-size:14px; font-weight:500;">Винный бар «Тихо»</span><br>
+          <span style="font-size:12px; color:var(--color-text-secondary);">уютно · небольшие компании</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:24px; border-top:0.5px solid var(--color-border-tertiary); display:flex; align-items:flex-end; justify-content:space-around; padding:10px 6px 14px;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:3px; flex:1;">
+        <i class="ti ti-news" style="font-size:22px; color:var(--color-text-secondary);"></i>
+        <span style="font-size:11px; color:var(--color-text-secondary);">Лента</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:3px; flex:1;">
+        <i class="ti ti-compass" style="font-size:22px; color:var(--color-text-primary);"></i>
+        <span style="font-size:11px; color:var(--color-text-primary); font-weight:500;">Каталог</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px; flex:1;">
+        <div style="width:52px; height:52px; border-radius:50%; background:#D4537E; border:3px solid var(--color-background-primary); display:flex; align-items:center; justify-content:center; margin-top:-24px;">
+          <i class="ti ti-sparkles" style="font-size:26px; color:#fff;"></i>
+        </div>
+        <span style="font-size:11px; color:var(--color-text-primary); font-weight:500;">Волли</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:3px; flex:1;">
+        <i class="ti ti-users" style="font-size:22px; color:var(--color-text-secondary);"></i>
+        <span style="font-size:11px; color:var(--color-text-secondary);">Друзья</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:3px; flex:1;">
+        <i class="ti ti-user" style="font-size:22px; color:var(--color-text-secondary);"></i>
+        <span style="font-size:11px; color:var(--color-text-secondary);">Я</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">02 · ПИЛЛАР 1</div>
+<div class="screen-title">Волли-чат (голос)</div>
+<div class="screen-desc">Диалог с Волли: результаты карточками прямо в чате; голос в обе стороны (Yandex SpeechKit), расшифровка под тап, ответ Волли озвучивается автоматически.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:0.5px solid var(--color-border-tertiary);">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="width:26px; height:26px; border-radius:50%; background:#D4537E; display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-sparkles" style="font-size:15px; color:#fff;"></i>
+        </div>
+        <span style="font-size:17px; font-weight:500;">Волли</span>
+      </div>
+      <i class="ti ti-edit" style="font-size:20px; color:var(--color-text-secondary);"></i>
+    </div>
+    <div style="padding:16px; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; justify-content:flex-end;">
+        <div style="max-width:80%; background:#D4537E; color:#fff; padding:9px 13px; border-radius:14px 14px 4px 14px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="ti ti-microphone" style="font-size:15px; color:#fff;"></i>
+            <div style="display:flex; align-items:center; gap:2px;">
+              <span style="width:2px; height:6px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:11px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:16px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:9px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:14px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:18px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:8px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:13px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:10px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+              <span style="width:2px; height:15px; background:rgba(255,255,255,0.7); border-radius:1px;"></span>
+            </div>
+            <span style="font-size:11px; color:rgba(255,255,255,0.85);">0:06</span>
+          </div>
+          <div style="font-size:13px; line-height:1.5; margin-top:6px;">«Хочу вечером в спокойное место, без толпы»</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <div style="width:30px; height:30px; flex-shrink:0; border-radius:50%; background:#D4537E; display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-sparkles" style="font-size:16px; color:#fff;"></i>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px; flex:1; min-width:0;">
+          <div style="background:var(--color-background-secondary); padding:9px 13px; border-radius:4px 14px 14px 14px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="width:22px; height:22px; border-radius:50%; background:#D4537E; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="ti ti-player-play" style="font-size:12px; color:#fff;"></i>
+              </div>
+              <div style="display:flex; align-items:center; gap:2px;">
+                <span style="width:2px; height:5px; background:#D4537E; border-radius:1px;"></span>
+                <span style="width:2px; height:10px; background:#D4537E; border-radius:1px;"></span>
+                <span style="width:2px; height:14px; background:#D4537E; border-radius:1px;"></span>
+                <span style="width:2px; height:7px; background:#D4537E; border-radius:1px;"></span>
+                <span style="width:2px; height:12px; background:#D4537E; border-radius:1px;"></span>
+                <span style="width:2px; height:16px; background:#D4537E; border-radius:1px;"></span>
+                <span style="width:2px; height:8px; background:#D4537E; border-radius:1px;"></span>
+                <span style="width:2px; height:11px; background:#D4537E; border-radius:1px;"></span>
+              </div>
+              <span style="font-size:11px; color:var(--color-text-secondary);">0:09</span>
+            </div>
+            <div style="font-size:13px; line-height:1.5; margin-top:6px;">Под твой вайб «тихие вечера» — два места рядом:</div>
+          </div>
+          <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+            <div style="display:flex; gap:10px; padding:10px;">
+              <div style="width:48px; height:48px; flex-shrink:0; border-radius:var(--border-radius-md); background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+                <i class="ti ti-glass" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+              </div>
+              <div style="min-width:0;">
+                <div style="font-size:13px; font-weight:500;">Винный бар «Тихо»</div>
+                <div style="font-size:12px; color:var(--color-text-secondary);">0.4 км · уютно, негромко</div>
+              </div>
+            </div>
+            <div style="display:flex; border-top:0.5px solid var(--color-border-tertiary);">
+              <div style="flex:1; text-align:center; font-size:12px; color:var(--color-text-secondary); padding:8px; border-right:0.5px solid var(--color-border-tertiary);">Подробнее</div>
+              <div style="flex:1; text-align:center; font-size:12px; font-weight:500; color:#D4537E; padding:8px;">Забронировать</div>
+            </div>
+          </div>
+          <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+            <div style="display:flex; gap:10px; padding:10px;">
+              <div style="width:48px; height:48px; flex-shrink:0; border-radius:var(--border-radius-md); background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+                <i class="ti ti-mug" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+              </div>
+              <div style="min-width:0;">
+                <div style="font-size:13px; font-weight:500;">Чайная «Вечер»</div>
+                <div style="font-size:12px; color:var(--color-text-secondary);">0.7 км · спокойно, светло</div>
+              </div>
+            </div>
+            <div style="display:flex; border-top:0.5px solid var(--color-border-tertiary);">
+              <div style="flex:1; text-align:center; font-size:12px; color:var(--color-text-secondary); padding:8px; border-right:0.5px solid var(--color-border-tertiary);">Подробнее</div>
+              <div style="flex:1; text-align:center; font-size:12px; font-weight:500; color:#D4537E; padding:8px;">Забронировать</div>
+            </div>
+          </div>
+          <div style="background:var(--color-background-secondary); font-size:13px; line-height:1.5; padding:9px 13px; border-radius:4px 14px 14px 14px;">Скажи голосом — во сколько и на сколько человек, и я забронирую.</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:auto; padding:8px 12px 0; display:flex; gap:6px; overflow:hidden;">
+      <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:5px 10px; border-radius:14px; white-space:nowrap;">идея для свидания</span>
+      <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:5px 10px; border-radius:14px; white-space:nowrap;">куда с друзьями</span>
+      <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:5px 10px; border-radius:14px; white-space:nowrap;">поездка</span>
+    </div>
+    <div style="padding:12px; display:flex; align-items:center; gap:8px;">
+      <div style="flex:1; font-size:13px; color:var(--color-text-tertiary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:18px; padding:10px 14px;">Скажи или напиши Волли…</div>
+      <div style="width:42px; height:42px; flex-shrink:0; border-radius:50%; background:#D4537E; display:flex; align-items:center; justify-content:center;">
+        <i class="ti ti-microphone" style="font-size:20px; color:#fff;"></i>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">03 · ПИЛЛАР 1</div>
+<div class="screen-title">Шит брони</div>
+<div class="screen-desc">Симулированная бронь, выезжает снизу: дата/время/гости, Волли пред-заполняет время из диалога. Подтверждение возвращается в чат и в «Я → Мои брони».</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; height:540px; background:rgba(0,0,0,0.5); border-radius:28px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end;">
+    <div style="background:var(--color-background-primary); border-radius:24px 24px 0 0; padding:14px 18px 20px;">
+      <div style="width:36px; height:4px; background:var(--color-border-secondary); border-radius:2px; margin:0 auto 16px;"></div>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+        <div style="width:44px; height:44px; flex-shrink:0; border-radius:var(--border-radius-md); background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-glass" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div>
+          <div style="font-size:15px; font-weight:500;">Винный бар «Тихо»</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">0.4 км · уютно, негромко</div>
+        </div>
+      </div>
+      <div style="border-top:0.5px solid var(--color-border-tertiary); padding-top:14px;">
+        <div style="font-size:12px; color:var(--color-text-secondary); margin-bottom:7px;">Дата</div>
+        <div style="display:flex; gap:6px; margin-bottom:14px;">
+          <span style="font-size:12px; font-weight:500; color:#fff; background:#D4537E; padding:7px 12px; border-radius:var(--border-radius-md);">Сегодня</span>
+          <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:7px 12px; border-radius:var(--border-radius-md);">Завтра</span>
+          <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:7px 12px; border-radius:var(--border-radius-md);">Сб 26</span>
+          <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:7px 12px; border-radius:var(--border-radius-md);">Вс 27</span>
+        </div>
+        <div style="font-size:12px; color:var(--color-text-secondary); margin-bottom:7px;">Время</div>
+        <div style="display:flex; gap:6px; margin-bottom:7px;">
+          <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:7px 10px; border-radius:var(--border-radius-md);">19:00</span>
+          <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:7px 10px; border-radius:var(--border-radius-md);">19:30</span>
+          <span style="font-size:12px; font-weight:500; color:#fff; background:#D4537E; padding:7px 10px; border-radius:var(--border-radius-md);">20:00</span>
+          <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:7px 10px; border-radius:var(--border-radius-md);">20:30</span>
+          <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:7px 10px; border-radius:var(--border-radius-md);">21:00</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:5px; margin-bottom:14px;">
+          <i class="ti ti-sparkles" style="font-size:13px; color:#D4537E;"></i>
+          <span style="font-size:11px; color:var(--color-text-secondary);">Волли подставил 20:00 — под «вечер» из твоего запроса</span>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+          <span style="font-size:13px;">Гости</span>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:30px; height:30px; border-radius:50%; border:0.5px solid var(--color-border-secondary); display:flex; align-items:center; justify-content:center;">
+              <i class="ti ti-minus" style="font-size:15px; color:var(--color-text-secondary);"></i>
+            </div>
+            <span style="font-size:15px; font-weight:500; min-width:14px; text-align:center;">2</span>
+            <div style="width:30px; height:30px; border-radius:50%; border:0.5px solid var(--color-border-secondary); display:flex; align-items:center; justify-content:center;">
+              <i class="ti ti-plus" style="font-size:15px; color:var(--color-text-secondary);"></i>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:13px; color:var(--color-text-tertiary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-md); padding:10px 12px; margin-bottom:16px;">Пожелание к брони — необязательно</div>
+        <div style="background:#D4537E; color:#fff; font-size:15px; font-weight:500; text-align:center; padding:13px; border-radius:var(--border-radius-lg);">Забронировать</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">04 · ПИЛЛАР 1</div>
+<div class="screen-title">Каталог — Волли как фильтр</div>
+<div class="screen-desc">Категории чипами, без ручных фильтров. Волли и есть фильтр: обучающая строка-подсказка + 4 чипа-примера.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px 12px;">
+      <span style="font-size:18px; font-weight:500;">Каталог</span>
+      <i class="ti ti-search" style="font-size:20px; color:var(--color-text-secondary);"></i>
+    </div>
+    <div style="display:flex; gap:6px; padding:0 16px 14px;">
+      <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:6px 11px; border-radius:14px;">События</span>
+      <span style="font-size:12px; font-weight:500; color:#fff; background:#D4537E; padding:6px 11px; border-radius:14px;">Рестораны</span>
+      <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:6px 11px; border-radius:14px;">Концерты</span>
+      <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:6px 11px; border-radius:14px;">Поездки</span>
+    </div>
+    <div style="margin:0 16px 8px; background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:11px 12px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <i class="ti ti-microphone" style="font-size:17px; color:#D4537E;"></i>
+        <span style="font-size:13px; color:var(--color-text-secondary);">Скажи Волли — район, кухня, настроение…</span>
+      </div>
+    </div>
+    <div style="display:flex; gap:6px; padding:0 16px 14px; flex-wrap:wrap;">
+      <span style="font-size:11px; color:#993556; background:#FBEAF0; padding:5px 10px; border-radius:13px;">район</span>
+      <span style="font-size:11px; color:#993556; background:#FBEAF0; padding:5px 10px; border-radius:13px;">кухня</span>
+      <span style="font-size:11px; color:#993556; background:#FBEAF0; padding:5px 10px; border-radius:13px;">сегодня</span>
+      <span style="font-size:11px; color:#993556; background:#FBEAF0; padding:5px 10px; border-radius:13px;">удиви меня</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:5px; padding:0 16px; margin-bottom:10px;">
+      <i class="ti ti-sparkles" style="font-size:14px; color:#D4537E;"></i>
+      <span style="font-size:13px; font-weight:500;">Под твой вайб «тихие вечера»</span>
+    </div>
+    <div style="padding:0 16px 18px; display:flex; flex-direction:column; gap:12px;">
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:92px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-glass" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:10px 12px;">
+          <div style="font-size:14px; font-weight:500;">Винный бар «Тихо»</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">₽₽ · 0.4 км · уютно, негромко</div>
+        </div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:92px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-mug" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:10px 12px;">
+          <div style="font-size:14px; font-weight:500;">Чайная «Вечер»</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">₽ · 0.7 км · спокойно, светло</div>
+        </div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:92px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-coffee" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:10px 12px;">
+          <div style="font-size:14px; font-weight:500;">Кафе «Свет»</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">₽₽ · 1.1 км · тихие столики у окна</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">05 · ПИЛЛАР 1</div>
+<div class="screen-title">Каталог — состояние «Волли отфильтровал»</div>
+<div class="screen-desc">После запроса: строка хранит запрос пользователя, под-строка — интерпретацию Волли, список переранжирован, «сбросить».</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px 12px;">
+      <span style="font-size:18px; font-weight:500;">Каталог</span>
+      <i class="ti ti-search" style="font-size:20px; color:var(--color-text-secondary);"></i>
+    </div>
+    <div style="display:flex; gap:6px; padding:0 16px 14px;">
+      <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:6px 11px; border-radius:14px;">События</span>
+      <span style="font-size:12px; font-weight:500; color:#fff; background:#D4537E; padding:6px 11px; border-radius:14px;">Рестораны</span>
+      <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:6px 11px; border-radius:14px;">Концерты</span>
+      <span style="font-size:12px; color:var(--color-text-primary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:6px 11px; border-radius:14px;">Поездки</span>
+    </div>
+    <div style="margin:0 16px 14px; display:flex; align-items:center; gap:8px; background:var(--color-background-secondary); border:1px solid #D4537E; border-radius:var(--border-radius-lg); padding:10px 12px;">
+      <i class="ti ti-microphone" style="font-size:17px; color:#D4537E;"></i>
+      <span style="font-size:13px; color:var(--color-text-primary); flex:1;">«негромко, где-нибудь в центре»</span>
+      <i class="ti ti-x" style="font-size:16px; color:var(--color-text-secondary);"></i>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:0 16px; margin-bottom:4px;">
+      <div style="display:flex; align-items:center; gap:5px;">
+        <i class="ti ti-sparkles" style="font-size:14px; color:#D4537E;"></i>
+        <span style="font-size:13px; font-weight:500;">Волли нашёл 3 места</span>
+      </div>
+      <span style="font-size:12px; color:#D4537E;">Сбросить</span>
+    </div>
+    <div style="padding:0 16px; margin-bottom:12px;">
+      <span style="font-size:12px; color:var(--color-text-secondary);">центр · тихо · под твой вайб «тихие вечера»</span>
+    </div>
+    <div style="padding:0 16px 18px; display:flex; flex-direction:column; gap:12px;">
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:92px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-glass" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:10px 12px;">
+          <div style="font-size:14px; font-weight:500;">Винный бар «Тихо»</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">₽₽ · центр, 0.4 км · негромко</div>
+        </div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:92px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-books" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:10px 12px;">
+          <div style="font-size:14px; font-weight:500;">Бар «Полка»</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">₽₽ · центр, 0.6 км · тихий, книжный</div>
+        </div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:92px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-coffee" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:10px 12px;">
+          <div style="font-size:14px; font-weight:500;">Кафе «Свет»</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">₽₽ · центр, 0.9 км · столики у окна</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">06 · ПИЛЛАР 1</div>
+<div class="screen-title">Карточка места</div>
+<div class="screen-desc">Фото, блок «почему по вайбу», описание и инфо, соц-отметка друзей, контекстный «спроси Волли», CTA «Забронировать».</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="position:relative; height:150px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+      <i class="ti ti-glass" style="font-size:40px; color:var(--color-text-tertiary);"></i>
+      <div style="position:absolute; top:12px; left:12px; width:32px; height:32px; border-radius:50%; background:var(--color-background-primary); display:flex; align-items:center; justify-content:center;">
+        <i class="ti ti-arrow-left" style="font-size:17px; color:var(--color-text-primary);"></i>
+      </div>
+      <div style="position:absolute; top:12px; right:12px; width:32px; height:32px; border-radius:50%; background:var(--color-background-primary); display:flex; align-items:center; justify-content:center;">
+        <i class="ti ti-heart" style="font-size:17px; color:var(--color-text-secondary);"></i>
+      </div>
+    </div>
+    <div style="padding:14px 16px 0;">
+      <div style="font-size:18px; font-weight:500;">Винный бар «Тихо»</div>
+      <div style="font-size:13px; color:var(--color-text-secondary); margin-top:2px;">₽₽ · винный бар · центр</div>
+    </div>
+    <div style="margin:12px 16px 0; background:var(--color-background-secondary); border:1px solid #D4537E; border-radius:var(--border-radius-lg); padding:11px 12px;">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <i class="ti ti-sparkles" style="font-size:15px; color:#D4537E;"></i>
+        <span style="font-size:13px; font-weight:500;">Под твой вайб «тихие вечера»</span>
+      </div>
+      <div style="font-size:12px; color:var(--color-text-secondary); line-height:1.5; margin-top:5px;">Негромко, небольшие компании, мягкий свет — то, что ты любишь.</div>
+    </div>
+    <div style="font-size:13px; color:var(--color-text-secondary); line-height:1.55; padding:12px 16px 0;">Маленький бар на 8 столов. Приглушённый свет, без фоновой музыки, тихие разговоры.</div>
+    <div style="padding:12px 16px 0; display:flex; flex-direction:column; gap:8px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <i class="ti ti-map-pin" style="font-size:16px; color:var(--color-text-tertiary);"></i>
+        <span style="font-size:13px;">ул. Тихая, 4 · 0.4 км от тебя</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <i class="ti ti-clock" style="font-size:16px; color:var(--color-text-tertiary);"></i>
+        <span style="font-size:13px;">сегодня до 23:00</span>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px; padding:12px 16px 0;">
+      <div style="display:flex;">
+        <div style="width:24px; height:24px; border-radius:50%; background:var(--color-background-info); color:var(--color-text-info); font-size:11px; display:flex; align-items:center; justify-content:center;">А</div>
+        <div style="width:24px; height:24px; border-radius:50%; background:var(--color-background-success); color:var(--color-text-success); font-size:11px; display:flex; align-items:center; justify-content:center; margin-left:-7px;">М</div>
+      </div>
+      <span style="font-size:12px; color:var(--color-text-secondary);">Анна и Миша были здесь</span>
+    </div>
+    <div style="margin:14px 16px 0; display:flex; align-items:center; gap:8px; background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:10px 12px;">
+      <i class="ti ti-microphone" style="font-size:17px; color:#D4537E;"></i>
+      <span style="font-size:13px; color:var(--color-text-secondary);">Спроси Волли — тут шумно вечером?</span>
+    </div>
+    <div style="margin-top:16px; border-top:0.5px solid var(--color-border-tertiary); padding:12px 16px;">
+      <div style="background:#D4537E; color:#fff; font-size:15px; font-weight:500; text-align:center; padding:13px; border-radius:var(--border-radius-lg);">Забронировать</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">07 · ПИЛЛАР 2</div>
+<div class="screen-title">Знакомства</div>
+<div class="screen-desc">Люди с похожим вайбом: фото-карточки, совпадение через общий архетип и черты, без мэтч-скора, списком.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px 12px;">
+      <span style="font-size:18px; font-weight:500;">Друзья</span>
+      <div style="position:relative;">
+        <i class="ti ti-bell" style="font-size:20px; color:var(--color-text-secondary);"></i>
+        <span style="position:absolute; top:0; right:0; width:7px; height:7px; background:#D4537E; border-radius:50%;"></span>
+      </div>
+    </div>
+    <div style="margin:0 16px 14px; display:flex; background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:3px;">
+      <div style="flex:1; text-align:center; font-size:13px; color:var(--color-text-secondary); padding:7px;">Мои друзья</div>
+      <div style="flex:1; text-align:center; font-size:13px; font-weight:500; color:var(--color-text-primary); background:var(--color-background-primary); border-radius:6px; padding:7px;">Знакомства</div>
+    </div>
+    <div style="margin:0 16px 14px; display:flex; align-items:center; gap:8px; background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:10px 12px;">
+      <i class="ti ti-microphone" style="font-size:17px; color:#D4537E;"></i>
+      <span style="font-size:13px; color:var(--color-text-secondary);">Спроси Волли — с кем сходить на концерт?</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:5px; padding:0 16px; margin-bottom:10px;">
+      <i class="ti ti-sparkles" style="font-size:14px; color:#D4537E;"></i>
+      <span style="font-size:13px; font-weight:500;">Похожий вайб рядом</span>
+    </div>
+    <div style="padding:0 16px 18px; display:flex; flex-direction:column; gap:12px;">
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:132px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:44px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:12px;">
+          <div style="font-size:15px; font-weight:500;">Лена</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">«Хранитель тихих вечеров» · рядом</div>
+          <div style="display:flex; align-items:center; gap:5px; margin-top:9px;">
+            <i class="ti ti-sparkles" style="font-size:13px; color:#D4537E;"></i>
+            <span style="font-size:12px; color:var(--color-text-primary);">Вы оба «тихие вечера»</span>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:8px;">
+            <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">спокойный темп</span>
+            <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">узкий круг</span>
+          </div>
+          <div style="margin-top:12px; text-align:center; font-size:13px; font-weight:500; color:#D4537E; border:1px solid #D4537E; border-radius:var(--border-radius-md); padding:8px;">Познакомиться</div>
+        </div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:132px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:44px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:12px;">
+          <div style="font-size:15px; font-weight:500;">Артём</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">«Домашний философ» · 3 км</div>
+          <div style="display:flex; align-items:center; gap:5px; margin-top:9px;">
+            <i class="ti ti-sparkles" style="font-size:13px; color:#D4537E;"></i>
+            <span style="font-size:12px; color:var(--color-text-primary);">Близкий вайб — оба за спокойствие</span>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:8px;">
+            <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">спокойный темп</span>
+            <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">уют</span>
+          </div>
+          <div style="margin-top:12px; text-align:center; font-size:13px; font-weight:500; color:#D4537E; border:1px solid #D4537E; border-radius:var(--border-radius-md); padding:8px;">Познакомиться</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">08 · ПИЛЛАР 2</div>
+<div class="screen-title">Профиль друга</div>
+<div class="screen-desc">Полный экран человека: вайб-идентичность, «ваш общий вайб», общие друзья, история мест, ближайшее событие, действия Написать / Пригласить / Подарить.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="position:relative; height:148px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+      <i class="ti ti-user" style="font-size:46px; color:var(--color-text-tertiary);"></i>
+      <div style="position:absolute; top:12px; left:12px; width:32px; height:32px; border-radius:50%; background:var(--color-background-primary); display:flex; align-items:center; justify-content:center;">
+        <i class="ti ti-arrow-left" style="font-size:17px; color:var(--color-text-primary);"></i>
+      </div>
+      <div style="position:absolute; top:12px; right:12px; width:32px; height:32px; border-radius:50%; background:var(--color-background-primary); display:flex; align-items:center; justify-content:center;">
+        <i class="ti ti-dots" style="font-size:17px; color:var(--color-text-secondary);"></i>
+      </div>
+    </div>
+    <div style="padding:14px 16px 0;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:18px; font-weight:500;">Лена</span>
+        <span style="display:flex; align-items:center; gap:3px; font-size:11px; color:var(--color-text-success); background:var(--color-background-success); padding:3px 8px; border-radius:10px;"><i class="ti ti-check" style="font-size:12px;"></i>в друзьях</span>
+      </div>
+      <div style="font-size:13px; color:var(--color-text-secondary); margin-top:2px;">«Хранитель тихих вечеров»</div>
+    </div>
+    <div style="margin:12px 16px 0; display:flex; align-items:center; gap:10px; border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:9px 12px;">
+      <div style="display:flex;">
+        <div style="width:24px; height:24px; border-radius:50%; background:var(--color-background-info); color:var(--color-text-info); font-size:10px; display:flex; align-items:center; justify-content:center;">А</div>
+        <div style="width:24px; height:24px; border-radius:50%; background:var(--color-background-warning); color:var(--color-text-warning); font-size:10px; display:flex; align-items:center; justify-content:center; margin-left:-7px;">М</div>
+        <div style="width:24px; height:24px; border-radius:50%; background:var(--color-background-success); color:var(--color-text-success); font-size:10px; display:flex; align-items:center; justify-content:center; margin-left:-7px;">К</div>
+      </div>
+      <span style="flex:1; font-size:13px;">5 общих друзей</span>
+      <i class="ti ti-chevron-right" style="font-size:17px; color:var(--color-text-tertiary);"></i>
+    </div>
+    <div style="padding:12px 16px 0;">
+      <div style="font-size:16px; font-weight:500; color:#D4537E;">«Свет в тихом окне»</div>
+      <div style="font-size:13px; color:var(--color-text-secondary); line-height:1.55; margin-top:4px;">Любит медленные вечера, тёплый свет и разговоры вполголоса.</div>
+      <div style="display:flex; gap:6px; margin-top:9px; flex-wrap:wrap;">
+        <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">спокойный темп</span>
+        <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">узкий круг</span>
+        <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">ритуалы</span>
+      </div>
+    </div>
+    <div style="margin:14px 16px 0; background:var(--color-background-secondary); border:1px solid #D4537E; border-radius:var(--border-radius-lg); padding:11px 12px;">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <i class="ti ti-sparkles" style="font-size:15px; color:#D4537E;"></i>
+        <span style="font-size:13px; font-weight:500;">Ваш общий вайб</span>
+      </div>
+      <div style="font-size:12px; color:var(--color-text-secondary); line-height:1.5; margin-top:5px;">Вы оба «тихие вечера». Общее: спокойный темп, узкий круг.</div>
+    </div>
+    <div style="padding:14px 16px 0;">
+      <div style="font-size:12px; color:var(--color-text-secondary); margin-bottom:7px;">Скоро идёт</div>
+      <div style="display:flex; align-items:center; gap:10px; border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:10px;">
+        <div style="width:38px; height:38px; flex-shrink:0; border-radius:var(--border-radius-md); background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-music" style="font-size:19px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:13px; font-weight:500;">Джаз на крыше</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">суббота, 20:00</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+    </div>
+    <div style="padding:14px 0 18px;">
+      <div style="font-size:12px; color:var(--color-text-secondary); margin:0 16px 8px;">Был здесь</div>
+      <div style="display:flex; gap:10px; padding:0 16px; overflow:hidden;">
+        <div style="width:92px; flex-shrink:0;">
+          <div style="height:60px; border-radius:var(--border-radius-md); background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-glass" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <div style="font-size:11px; margin-top:5px;">Бар «Тихо»</div>
+        </div>
+        <div style="width:92px; flex-shrink:0;">
+          <div style="height:60px; border-radius:var(--border-radius-md); background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-mug" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <div style="font-size:11px; margin-top:5px;">Чайная «Вечер»</div>
+        </div>
+        <div style="width:92px; flex-shrink:0;">
+          <div style="height:60px; border-radius:var(--border-radius-md); background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-building-monument" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <div style="font-size:11px; margin-top:5px;">Выставка света</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:auto; border-top:0.5px solid var(--color-border-tertiary); padding:10px 8px; display:flex;">
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;">
+        <i class="ti ti-message" style="font-size:21px; color:#D4537E;"></i>
+        <span style="font-size:11px; color:var(--color-text-primary);">Написать</span>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;">
+        <i class="ti ti-calendar-plus" style="font-size:21px; color:#D4537E;"></i>
+        <span style="font-size:11px; color:var(--color-text-primary);">Пригласить</span>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;">
+        <i class="ti ti-gift" style="font-size:21px; color:#D4537E;"></i>
+        <span style="font-size:11px; color:var(--color-text-primary);">Подарить</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">09 · ПИЛЛАР 2</div>
+<div class="screen-title">Друзья — список</div>
+<div class="screen-desc">Вкладка «Мои друзья»: поиск, счётчик, строки друзей (фото, имя, архетип), тап → профиль.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px 12px;">
+      <span style="font-size:18px; font-weight:500;">Друзья</span>
+      <div style="position:relative;">
+        <i class="ti ti-bell" style="font-size:20px; color:var(--color-text-secondary);"></i>
+        <span style="position:absolute; top:0; right:0; width:7px; height:7px; background:#D4537E; border-radius:50%;"></span>
+      </div>
+    </div>
+    <div style="margin:0 16px 14px; display:flex; background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:3px;">
+      <div style="flex:1; text-align:center; font-size:13px; font-weight:500; color:var(--color-text-primary); background:var(--color-background-primary); border-radius:6px; padding:7px;">Мои друзья</div>
+      <div style="flex:1; text-align:center; font-size:13px; color:var(--color-text-secondary); padding:7px;">Знакомства</div>
+    </div>
+    <div style="margin:0 16px 12px; display:flex; align-items:center; gap:8px; background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-md); padding:9px 12px;">
+      <i class="ti ti-search" style="font-size:16px; color:var(--color-text-secondary);"></i>
+      <span style="font-size:13px; color:var(--color-text-tertiary);">Поиск среди друзей</span>
+    </div>
+    <div style="font-size:12px; color:var(--color-text-secondary); padding:0 16px; margin-bottom:4px;">12 друзей</div>
+    <div style="padding:0 16px 18px;">
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+        <div style="width:44px; height:44px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:14px; font-weight:500;">Лена</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">«Хранитель тихих вечеров»</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+        <div style="width:44px; height:44px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:14px; font-weight:500;">Миша</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">«Городской исследователь»</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+        <div style="width:44px; height:44px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:14px; font-weight:500;">Артём</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">«Домашний философ»</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:0.5px solid var(--color-border-tertiary);">
+        <div style="width:44px; height:44px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:14px; font-weight:500;">Катя</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">«Душа компании»</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 0;">
+        <div style="width:44px; height:44px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:22px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:14px; font-weight:500;">Олег</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">«Спокойный наблюдатель»</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">10 · ПИЛЛАР 2</div>
+<div class="screen-title">Приглашения</div>
+<div class="screen-desc">Переключатель входящие/исходящие; карточки кто + событие + принять/отклонить. Заявки в друзья — секцией здесь же.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; gap:10px; padding:16px 18px 12px;">
+      <i class="ti ti-arrow-left" style="font-size:20px; color:var(--color-text-primary);"></i>
+      <span style="font-size:18px; font-weight:500;">Приглашения</span>
+    </div>
+    <div style="margin:0 16px 14px; display:flex; background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:3px;">
+      <div style="flex:1; text-align:center; font-size:13px; font-weight:500; color:var(--color-text-primary); background:var(--color-background-primary); border-radius:6px; padding:7px;">Входящие</div>
+      <div style="flex:1; text-align:center; font-size:13px; color:var(--color-text-secondary); padding:7px;">Исходящие</div>
+    </div>
+    <div style="padding:0 16px 18px; display:flex; flex-direction:column; gap:12px;">
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:12px;">
+        <div style="display:flex; align-items:center; gap:9px; margin-bottom:10px;">
+          <div style="width:34px; height:34px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-user" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <span style="font-size:14px;"><span style="font-weight:500;">Лена</span> приглашает тебя</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:9px; background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:9px 10px; margin-bottom:11px;">
+          <div style="width:34px; height:34px; flex-shrink:0; border-radius:var(--border-radius-md); background:var(--color-background-primary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-music" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <div>
+            <div style="font-size:13px; font-weight:500;">Джаз на крыше</div>
+            <div style="font-size:12px; color:var(--color-text-secondary);">суббота, 20:00</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div style="flex:1; text-align:center; font-size:13px; color:var(--color-text-secondary); border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); padding:9px;">Отклонить</div>
+          <div style="flex:1; text-align:center; font-size:13px; font-weight:500; color:#fff; background:#D4537E; border-radius:var(--border-radius-md); padding:9px;">Принять</div>
+        </div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:12px;">
+        <div style="display:flex; align-items:center; gap:9px; margin-bottom:10px;">
+          <div style="width:34px; height:34px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-user" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <span style="font-size:14px;"><span style="font-weight:500;">Миша</span> приглашает тебя</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:9px; background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:9px 10px; margin-bottom:11px;">
+          <div style="width:34px; height:34px; flex-shrink:0; border-radius:var(--border-radius-md); background:var(--color-background-primary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-glass" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <div>
+            <div style="font-size:13px; font-weight:500;">Винный бар «Тихо»</div>
+            <div style="font-size:12px; color:var(--color-text-secondary);">пятница, 19:30</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div style="flex:1; text-align:center; font-size:13px; color:var(--color-text-secondary); border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); padding:9px;">Отклонить</div>
+          <div style="flex:1; text-align:center; font-size:13px; font-weight:500; color:#fff; background:#D4537E; border-radius:var(--border-radius-md); padding:9px;">Принять</div>
+        </div>
+      </div>
+      <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px;">Заявки в друзья</div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:12px; display:flex; align-items:center; gap:10px;">
+        <div style="width:38px; height:38px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:19px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:13px; font-weight:500;">Артём</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">хочет в друзья · похожий вайб</div>
+        </div>
+        <i class="ti ti-x" style="font-size:20px; color:var(--color-text-secondary);"></i>
+        <i class="ti ti-check" style="font-size:20px; color:#D4537E;"></i>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">11 · ПИЛЛАР 2</div>
+<div class="screen-title">Подарок билета</div>
+<div class="screen-desc">Симулированный подарок, выезжает снизу: получатель пред-подставлен, Волли подбирает билет под вайб друга, поле пожелания.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; height:560px; background:rgba(0,0,0,0.5); border-radius:28px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end;">
+    <div style="background:var(--color-background-primary); border-radius:24px 24px 0 0; padding:14px 18px 20px;">
+      <div style="width:36px; height:4px; background:var(--color-border-secondary); border-radius:2px; margin:0 auto 16px;"></div>
+      <div style="display:flex; align-items:center; gap:7px; margin-bottom:16px;">
+        <i class="ti ti-gift" style="font-size:19px; color:#D4537E;"></i>
+        <span style="font-size:16px; font-weight:500;">Подарить билет</span>
+      </div>
+      <div style="font-size:12px; color:var(--color-text-secondary); margin-bottom:7px;">Кому</div>
+      <div style="display:flex; align-items:center; gap:10px; border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:10px; margin-bottom:14px;">
+        <div style="width:38px; height:38px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-user" style="font-size:19px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:14px; font-weight:500;">Лена</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">«Хранитель тихих вечеров»</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:17px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="font-size:12px; color:var(--color-text-secondary); margin-bottom:7px;">Билет на</div>
+      <div style="display:flex; align-items:center; gap:10px; border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:10px; margin-bottom:7px;">
+        <div style="width:38px; height:38px; flex-shrink:0; border-radius:var(--border-radius-md); background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-music" style="font-size:19px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:14px; font-weight:500;">Джаз на крыше</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">суббота, 20:00</div>
+        </div>
+        <span style="font-size:12px; color:#D4537E;">Изменить</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:5px; margin-bottom:14px;">
+        <i class="ti ti-sparkles" style="font-size:13px; color:#D4537E;"></i>
+        <span style="font-size:11px; color:var(--color-text-secondary);">Волли предложил — под вайб Лены «тихие вечера»</span>
+      </div>
+      <div style="font-size:12px; color:var(--color-text-secondary); margin-bottom:7px;">Пожелание</div>
+      <div style="font-size:13px; color:var(--color-text-tertiary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-md); padding:10px 12px; min-height:44px; margin-bottom:18px;">«Пойдём вместе?»</div>
+      <div style="background:#D4537E; color:#fff; font-size:15px; font-weight:500; text-align:center; padding:13px; border-radius:var(--border-radius-lg);">Подарить билет</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">12 · ЭВОЛЮЦИЯ</div>
+<div class="screen-title">«Я»</div>
+<div class="screen-desc">Вайб-портрет (сохранён из v0.1) + разделы: Мои брони, Мои билеты, Сохранённое, Друзья.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px 8px;">
+      <span style="font-size:18px; font-weight:500;">Я</span>
+      <i class="ti ti-settings" style="font-size:20px; color:var(--color-text-secondary);"></i>
+    </div>
+    <div style="padding:8px 16px 16px; display:flex; flex-direction:column; align-items:center; text-align:center;">
+      <div style="width:72px; height:72px; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center; margin-bottom:8px;">
+        <i class="ti ti-user" style="font-size:34px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="font-size:18px; font-weight:500;">Виктор</div>
+      <div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:10px;">«Хранитель тихих вечеров»</div>
+      <div style="font-size:16px; font-weight:500; color:#D4537E;">«Тихая пристань»</div>
+      <div style="font-size:13px; color:var(--color-text-secondary); line-height:1.55; margin-top:4px;">Медленные вечера, тёплый свет, узкий круг — твой ритм.</div>
+      <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; justify-content:center;">
+        <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">спокойный темп</span>
+        <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">узкий круг</span>
+        <span style="font-size:11px; color:var(--color-text-secondary); background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); padding:4px 9px; border-radius:12px;">тёплый свет</span>
+      </div>
+    </div>
+    <div style="padding:0 16px 18px;">
+      <div style="display:flex; align-items:center; gap:12px; padding:13px 0; border-top:0.5px solid var(--color-border-tertiary);">
+        <i class="ti ti-calendar-check" style="font-size:21px; color:#D4537E;"></i>
+        <span style="flex:1; font-size:14px;">Мои брони</span>
+        <span style="font-size:13px; color:var(--color-text-secondary);">2</span>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:13px 0; border-top:0.5px solid var(--color-border-tertiary);">
+        <i class="ti ti-ticket" style="font-size:21px; color:#D4537E;"></i>
+        <span style="flex:1; font-size:14px;">Мои билеты</span>
+        <span style="font-size:13px; color:var(--color-text-secondary);">1</span>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:13px 0; border-top:0.5px solid var(--color-border-tertiary);">
+        <i class="ti ti-heart" style="font-size:21px; color:#D4537E;"></i>
+        <span style="flex:1; font-size:14px;">Сохранённое</span>
+        <span style="font-size:13px; color:var(--color-text-secondary);">5</span>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:13px 0; border-top:0.5px solid var(--color-border-tertiary); border-bottom:0.5px solid var(--color-border-tertiary);">
+        <i class="ti ti-users" style="font-size:21px; color:#D4537E;"></i>
+        <span style="flex:1; font-size:14px;">Друзья</span>
+        <span style="font-size:13px; color:var(--color-text-secondary);">12</span>
+        <i class="ti ti-chevron-right" style="font-size:18px; color:var(--color-text-tertiary);"></i>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="screen">
+<div class="screen-num">13 · ЭВОЛЮЦИЯ</div>
+<div class="screen-title">«Лента»</div>
+<div class="screen-desc">Смешанный поток: карточки-рекомендации под вайб (с «почему») + карточки активности друзей с кнопкой присоединиться.</div>
+<div style="background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:2rem 1rem; display:flex; justify-content:center;">
+  <div style="width:320px; background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:28px; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="padding:16px 18px 12px;">
+      <span style="font-size:18px; font-weight:500;">Лента</span>
+    </div>
+    <div style="margin:0 16px 14px; display:flex; align-items:center; gap:8px; background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:10px 12px;">
+      <i class="ti ti-microphone" style="font-size:17px; color:#D4537E;"></i>
+      <span style="font-size:13px; color:var(--color-text-secondary);">Спроси Волли — чем занять вечер?</span>
+    </div>
+    <div style="padding:0 16px 18px; display:flex; flex-direction:column; gap:12px;">
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:88px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-disc" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:11px 12px;">
+          <div style="font-size:14px; font-weight:500;">Вечер виниловой музыки</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">сегодня 19:00 · центр</div>
+          <div style="display:flex; align-items:center; gap:5px; margin-top:6px;">
+            <i class="ti ti-sparkles" style="font-size:12px; color:#D4537E;"></i>
+            <span style="font-size:11px; color:var(--color-text-secondary);">под твой вайб — спокойно, винил</span>
+          </div>
+        </div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:12px;">
+        <div style="display:flex; align-items:center; gap:9px; margin-bottom:10px;">
+          <div style="width:30px; height:30px; flex-shrink:0; border-radius:50%; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-user" style="font-size:16px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <span style="font-size:13px;"><span style="font-weight:500;">Лена</span> идёт в субботу</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:9px; background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:9px 10px; margin-bottom:11px;">
+          <div style="width:32px; height:32px; flex-shrink:0; border-radius:var(--border-radius-md); background:var(--color-background-primary); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-music" style="font-size:17px; color:var(--color-text-tertiary);"></i>
+          </div>
+          <div>
+            <div style="font-size:13px; font-weight:500;">Джаз на крыше</div>
+            <div style="font-size:12px; color:var(--color-text-secondary);">суббота, 20:00</div>
+          </div>
+        </div>
+        <div style="text-align:center; font-size:13px; font-weight:500; color:#D4537E; border:1px solid #D4537E; border-radius:var(--border-radius-md); padding:8px;">Присоединиться</div>
+      </div>
+      <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden;">
+        <div style="height:88px; background:var(--color-background-secondary); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-mug" style="font-size:28px; color:var(--color-text-tertiary);"></i>
+        </div>
+        <div style="padding:11px 12px;">
+          <div style="font-size:14px; font-weight:500;">Чайная «Вечер»</div>
+          <div style="font-size:12px; color:var(--color-text-secondary);">₽ · 0.7 км · спокойно</div>
+          <div style="display:flex; align-items:center; gap:5px; margin-top:6px;">
+            <i class="ti ti-sparkles" style="font-size:12px; color:#D4537E;"></i>
+            <span style="font-size:11px; color:var(--color-text-secondary);">под твой вайб — тихо, светло</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</body>
+</html>
