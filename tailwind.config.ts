@@ -34,12 +34,16 @@ const config: Config = {
         // Aurora — glass surface fill (tokens §4 split: #b0 decorative / #d0 text-heavy)
         "glass-bg": "#ffffffb0",
         "glass-bg-strong": "#ffffffd0",
+        // Aurora v0.2 (proto/usp, tokens "Новые токены v0.2") — composited over mesh/cream
+        "accent-tint": "rgba(212,83,126,0.12)", // seed chips + "по вайбу" tag (§16)
+        "surface-volly": "#ffffffcc", // Волли voice bubble + in-chat cards (§14–15), NO blur
       },
       borderRadius: {
         card: "16px",
         portrait: "24px",
         pill: "999px",
         input: "12px",
+        bubble: "14px", // voice-bubble base radius (one corner collapses to 4px — §14)
       },
       fontFamily: {
         // Display = Playfair Display (Instrument Serif lacks Cyrillic — see tokens §2)
