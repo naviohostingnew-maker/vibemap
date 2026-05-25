@@ -21,6 +21,11 @@ const CATEGORY_ICON = {
   event: Ticket,
 } as const
 
+// The §15.3 placeholder icon for a category — shared with the place screen's photo block.
+export function categoryIcon(category: ResultCategory) {
+  return CATEGORY_ICON[category]
+}
+
 type CompactProps = {
   density?: 'compact'
   title: string

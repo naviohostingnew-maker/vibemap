@@ -53,6 +53,10 @@ export const MOCK_PLACES: Place[] = [
   { id: 'village-cafe', name: 'Деревенская кофейня', category: 'trip', priceTier: 2, distanceKm: 35, vibeTags: ['неспешно', 'вид'], vibeReason: 'Кофе на веранде с видом на поля — выходной без плана.', photoPlaceholder: 'trip' },
 ]
 
+export function getPlaceById(id: string): Place | undefined {
+  return MOCK_PLACES.find((p) => p.id === id)
+}
+
 // "₽" × tier.
 export function priceLabel(tier: PriceTier): string {
   return '₽'.repeat(tier)
