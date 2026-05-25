@@ -53,7 +53,7 @@ export default function VollyPage() {
           <span className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-accent-magenta">
             <Sparkles size={15} strokeWidth={1.5} className="text-white" aria-hidden />
           </span>
-          <span className="font-display text-[17px] font-medium text-ink">Волли</span>
+          <span className="font-display text-[17px] font-medium text-ink">Volly</span>
         </div>
         <button type="button" aria-label="Новый чат" className="text-ink-50 transition-colors active:text-ink">
           <Pencil size={18} strokeWidth={1.5} aria-hidden />

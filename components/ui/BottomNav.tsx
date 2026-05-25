@@ -68,7 +68,7 @@ export function BottomNav() {
                 vollyActive ? 'font-medium text-ink' : 'text-ink-30'
               }`}
             >
-              Волли
+              Volly
             </span>
           </Link>
         </li>

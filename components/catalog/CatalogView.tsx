@@ -66,7 +66,7 @@ export function CatalogView() {
       <div className="mb-3">
         <VollyAskBar
           variant="mic"
-          hint="Скажи Волли — район, кухня, настроение…"
+          hint="Скажи Volly — район, кухня, настроение…"
           value={query}
           onClick={() => setQuery(DEMO_VOICE_QUERY)}
           onReset={() => setQuery(null)}
@@ -80,7 +80,7 @@ export function CatalogView() {
             <span className="flex items-center gap-1.5">
               <Sparkles size={14} strokeWidth={1.5} className="text-accent-magenta" aria-hidden />
               <span className="font-body text-[13px] font-medium text-ink">
-                Волли нашёл {list.length} {placesWord(list.length)}
+                Volly нашёл {list.length} {placesWord(list.length)}
               </span>
             </span>
             <button

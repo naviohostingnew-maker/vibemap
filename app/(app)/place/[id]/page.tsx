@@ -91,7 +91,7 @@ export default function PlacePage({ params }: { params: { id: string } }) {
 
       {/* Contextual chat entry §13 (Sparkles → /volly) */}
       <div className="mt-4 px-[18px]">
-        <VollyAskBar variant="chat" hint="Спроси Волли об этом месте" href="/volly" />
+        <VollyAskBar variant="chat" hint="Спроси Volly об этом месте" href="/volly" />
       </div>
 
       {/* Primary CTA §5 — solid ink, one per screen. Booking sheet is session #3 (stub). */}
